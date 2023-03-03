@@ -6,52 +6,58 @@ import { AiFillPlayCircle } from 'react-icons/ai'
 import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi'
 import { MdPauseCircleFilled } from 'react-icons/md'
 
-const playIconProps = { size: 80, color: 'white', style: { cursor: 'pointer' } }
+const playIconProps = (disabled?: boolean) => {
+  return {
+    size: 80,
+    color: 'white',
+    style: { cursor: 'pointer', opacity: !!disabled ? 0.5 : 1 },
+  }
+}
 
-const marks = [
-  { value: 20, label: '20%' },
-  { value: 50, label: '50%' },
-  { value: 80, label: '80%' },
-]
-
-const AudioPlayer = (props) => {
+const AudioPlayer = (props: any) => {
   const { audio } = props
 
   const [sound, setSound] = useState<any>(null)
+  const [soundId, setSoundId] = useState(0)
+  const [time, setTime] = useState({ current: 0, duration: 0 })
+  const [currentTime, setCurrentTime] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [val, setVal] = useState(30)
+  const [progress, setProgress] = useState(0)
 
   const canPlay = audio !== null && audio !== ''
 
   useEffect(() => {
+    if (!audio) return
+    console.log('🚀 | useEffect | audio:', audio)
+
     // Initialize Howler.js
-    Howler.autoUnlock = false
-    // Create a new Howl object from the Audio object
-    // const bytes = atob( props.audio.split(',')[1]);
-    // const buffer = new Uint8Array(bytes.length);
-    // for (let i = 0; i < bytes.length; i++) {
-    //   buffer[i] = bytes.charCodeAt(i);
-    // }
-    // const blob = new Blob([buffer], { type: 'audio/wav' });
-    // const url = URL.createObjectURL(blob);
-
-    // create a new Howl object with the audio data
-    // this.sound = new Howl({
-    //   src: [url],
-    //   format: ['wav'],
-    //   onload: () => {
-    //     this.setState({ loaded: true });
-    //   }
-    // });
-
-    setSound(new Howl({ src: props.audio }))
+    // Howler.autoUnlock = false
+    const soundObj = new Howl({
+      src: props.audio,
+      onplay: () => {
+        console.log('duration', sound.duration())
+      },
+      onseek: () => {
+        console.log('Here')
+        setCurrentTime(sound.seek())
+        const progressVal = (sound.seek() / time.duration) * 100
+        setProgress(progressVal)
+      },
+    })
+    console.log('🚀 | useEffect | soundObj:', soundObj)
+    setSound(soundObj)
   }, [audio])
 
   const handlePlay = () => {
     if (!canPlay) return
     setIsPlaying(true)
     if (sound && !sound.playing()) {
-      sound.play()
+      const id = sound.play()
+      const dur = sound.duration(id)
+      setSoundId(id)
+      setTime((prev) => ({ ...prev, duration: dur }))
+      const progressVal = (sound.seek(id) / time.duration) * 100
+      setProgress(progressVal)
     }
   }
 
@@ -69,6 +75,11 @@ const AudioPlayer = (props) => {
   }
 
   const noAudio = audio === null || audio === ''
+
+  const getDurationInFormat = (seconds: number) => {
+    return Math.ceil(seconds)
+    // return Math.ceil(seconds/60)
+  }
 
   return (
     <Box
@@ -93,25 +104,26 @@ const AudioPlayer = (props) => {
       })}
     >
       <Flex justify='center' align='center' gap={10}>
-        <BiSkipPrevious {...playIconProps} size={40} />
+        <BiSkipPrevious
+          {...playIconProps()}
+          size={40}
+          style={{ opacity: canPlay ? 1 : 0.5 }}
+        />
         <Box>
           {isPlaying ? (
             <MdPauseCircleFilled
-              {...playIconProps}
+              {...playIconProps(!canPlay)}
               onClick={handlePause}
-              style={{ opacity: canPlay ? 1 : 0.5 }}
             />
           ) : (
             <AiFillPlayCircle
-              {...playIconProps}
-              style={{ opacity: canPlay ? 1 : 0.5 }}
+              {...playIconProps(!canPlay)}
               onClick={handlePlay}
-              // style={{ opacity: 0.5 }}
             />
           )}
         </Box>
         <BiSkipNext
-          {...playIconProps}
+          {...playIconProps()}
           size={40}
           style={{ opacity: canPlay ? 1 : 0.5 }}
         />
@@ -119,8 +131,8 @@ const AudioPlayer = (props) => {
 
       <Box mb={10} mt={10}>
         <Slider
-          defaultValue={0}
-          value={val}
+          value={progress}
+          max={100}
           labelTransition='fade'
           size={2}
           label={null}
@@ -159,9 +171,13 @@ const AudioPlayer = (props) => {
       </Box>
 
       <Flex gap={4} sx={{ marginInline: 'auto', width: 'fit-content' }}>
-        <Text size='sm'>02:10</Text>
+        <Text size='sm'>
+          {time.duration ? getDurationInFormat(sound.seek()) : '--'}
+        </Text>
         <Text size='sm'>/</Text>
-        <Text size='sm'>03:00</Text>
+        <Text size='sm'>
+          {time.duration ? getDurationInFormat(time.duration) : '--'}
+        </Text>
       </Flex>
     </Box>
   )

@@ -97,6 +97,7 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
                   const isActive = audioConfig.speed === speed
                   return (
                     <Chip
+                    key={speed}
                       value={speed}
                       size='xs'
                       checked={isActive}

@@ -212,13 +212,13 @@ const App = () => {
           }
         }
       >
-        <Title order={1} align='center' mb={40} mt={20}>
+        <Title order={1} align='center' mb={40}>
           Bedtime Stories
         </Title>
 
-        <Flex sx={{ width: '50%', marginInline: 'auto' }} gap={20}>
-          <Box sx={{ width: '620px' }}>
-            <Tabs defaultValue='story'>
+        <Stack sx={{ maxWidth: 600, marginInline: 'auto', gap: 70 }}>
+          <Flex sx={{ width: '100%', marginInline: 'auto' }} gap={20}>
+            <Tabs defaultValue='story' sx={{ width: '100%' }}>
               <Tabs.List>
                 <Tabs.Tab
                   value='story'
@@ -257,23 +257,26 @@ const App = () => {
               <Tabs.Panel value='custom' pt='xs'>
                 <TextInput minRows={10} ref={inputRef} />
                 <Box sx={{ height: 20 }} />
-                <Button
-                  disabled={mutation.isLoading}
-                  onClick={() => handleTextToSpeech(getInputText())}
-                >
-                  Convert to Speech
-                </Button>
               </Tabs.Panel>
             </Tabs>
-          </Box>
+          </Flex>
 
-          <Stack sx={{ minWidth: 600 }}>
+          <AudioConfig
+            audioConfig={audioConfig}
+            setAudioConfig={setAudioConfig}
+          />
+
+          <Stack>
             <>
+              <Button
+                disabled={mutation.isLoading}
+                onClick={() => handleTextToSpeech(getInputText())}
+                sx={{ width: 'fit-content', marginLeft: 'auto' }}
+              >
+                Convert to Speech
+              </Button>
+
               <AudioPlayer audio={audio} />
-              <AudioConfig
-                audioConfig={audioConfig}
-                setAudioConfig={setAudioConfig}
-              />
 
               {mutation.error && (
                 <Text size='sm' color='red'>
@@ -282,15 +285,9 @@ const App = () => {
               )}
             </>
           </Stack>
-        </Flex>
-
+        </Stack>
         <Box>
-          <>
-            {/* <AudioPlayer2 base64Data={audio} /> */}
-            {/* {audio !== '' && !mutation.isLoading && <AudioPlayer audio={audio} />} */}
-
-            {/* <AudioPlayer3 /> */}
-          </>
+          {/* {audio !== '' && !mutation.isLoading && <AudioPlayer audio={audio} />} */}
         </Box>
       </Box>
     </MantineProvider>
