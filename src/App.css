@@ -6,17 +6,22 @@
    row-gap: 10px;
 }
 
-
-.tts-button {
-  margin-top:5px;
+.App {
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 1);
 }
 
-button {
-  cursor: 'pointer';
+#story-list::-webkit-scrollbar {
+  width: 3px;
 }
 
-textarea {
-  width: 100%;
-  height: 100px;
-  font-family: 'Arial'
+#story-list::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+}
+
+#story-list::-webkit-scrollbar-thumb {
+  background-color: gray;
+  outline: 1px solid rgb(65, 65, 65);
 }
