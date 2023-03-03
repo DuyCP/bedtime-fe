@@ -1,18 +1,23 @@
+import React, { Dispatch } from 'react'
+
 import { Box, Flex, Stack, Text } from '@mantine/core'
-import React from 'react'
 
 interface IStoryItemProps {
   story: {
-    name: string
-    type: string
+    title: string
+    content: string
+    source: string
     length: string
+    updatedAt: string
   }
+  onSelect: Dispatch<React.SetStateAction<string>>
 }
 
 const StoryItem = (props: IStoryItemProps) => {
-  const {
-    story: { name, type, length },
-  } = props
+  const { story, onSelect } = props
+
+  const { title, content, source, length } = story
+
   return (
     <Flex
       justify='space-between'
@@ -25,13 +30,14 @@ const StoryItem = (props: IStoryItemProps) => {
           backgroundColor: '#1e1e21',
         },
       }}
+      onClick={() => onSelect(story)}
     >
       <Stack spacing={1}>
-        <Text sx={{ fontWeight: 'bold' }}>{name}</Text>
-        <Text size='xs'>{type}</Text>
+        <Text sx={{ fontWeight: 'bold' }}>{title}</Text>
+        <Text size='xs'>{source}</Text>
       </Stack>
 
-      <Text size='sm'>{length}</Text>
+      <Text size='sm'>{length || '04:20'}</Text>
     </Flex>
   )
 }

@@ -8,18 +8,16 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import { IconMessageCircle, IconPhoto, IconSettings } from '@tabler/icons-react'
-import { AiOutlineOrderedList } from 'react-icons/ai'
+import { useRef, useState } from 'react'
 import { BiCustomize } from 'react-icons/bi'
 import { BsMusicNoteList } from 'react-icons/bs'
-import { useRef, useState } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import './App.css'
 import AudioConfig from './components/AudioConfig'
 import AudioPlayer from './components/AudioPlayer'
-import { GENDER, PROVIDER } from './enums'
-import TextInput from './components/TextInput'
 import StoryItem from './components/StoryItem'
+import TextInput from './components/TextInput'
+import { GENDER, PROVIDER } from './enums'
 
 const BASE_URL = 'http://localhost:3000/api'
 const GOOGLE_ENDPOINT = `${BASE_URL}/tts/google`
@@ -140,6 +138,11 @@ const App = () => {
   })
 
   const [audio, setAudio] = useState<null | string>('')
+  const [selectedStory, setSelectedStory] = useState({
+    _id: 0,
+    title: '',
+    content: '',
+  })
   const inputRef = useRef()
 
   const mutation = useMutation((text) =>
@@ -167,13 +170,35 @@ const App = () => {
         const reader = new FileReader()
         reader.readAsDataURL(url)
         reader.onloadend = () => {
-          // const base64 = reader.result.split(',')[1] as string
-          // const audioData = `data:audio/mpeg;base64,` + base64
           const audioData = reader.result as string
           setAudio(audioData)
         }
       })
       .catch((error) => console.error(error))
+  )
+
+  const { error: getStoriesError, data: stories = [] } = useQuery(
+    'stories',
+    async () => {
+      const params = {
+        page: 1,
+        limit: 10,
+      }
+      const queryParams = new URLSearchParams(params as any).toString()
+
+      const response = await fetch(`${BASE_URL}/stories?${queryParams}`)
+      const responseData = await response.json()
+      const storyList = responseData.stories.stories
+
+      const promises = storyList.map(async (story) => {
+        const detailResponse = await fetch(`${BASE_URL}/story/${story._id}`)
+        const detail = await detailResponse.json()
+        return detail.story
+      })
+
+      const storiesWithDetail = await Promise.all(promises)
+      return storiesWithDetail
+    }
   )
 
   if (mutation.error)
@@ -245,9 +270,9 @@ const App = () => {
                     overflowY: 'scroll',
                   }}
                 >
-                  {STORY_LIST.map((story, index) => (
+                  {stories.map((story, index) => (
                     <Box key={index} sx={{ marginBottom: 10 }}>
-                      <StoryItem story={story} />
+                      <StoryItem story={story} onSelect={setSelectedStory} />
                     </Box>
                   ))}
                 </Box>
@@ -270,7 +295,9 @@ const App = () => {
             <>
               <Button
                 disabled={mutation.isLoading}
-                onClick={() => handleTextToSpeech(getInputText())}
+                onClick={() =>
+                  handleTextToSpeech(getInputText() || selectedStory.content)
+                }
                 sx={{ width: 'fit-content', marginLeft: 'auto' }}
               >
                 Convert to Speech
