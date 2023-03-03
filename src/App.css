@@ -1,10 +1,7 @@
-.text-input-container {
-   margin: 0 auto;
-   width: fit-content;
-   display: flex;
-   flex-direction: column;
-   row-gap: 10px;
+#root {
+  height: 100%;
 }
+
 
 .App {
   height: 100%;
@@ -13,6 +10,7 @@
   background-size: cover;
   background-color: rgba(0, 0, 0, 1);
 }
+
 
 #story-list::-webkit-scrollbar {
   width: 3px;
@@ -26,3 +24,4 @@
   background-color: gray;
   outline: 1px solid rgb(65, 65, 65);
 }
+

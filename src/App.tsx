@@ -243,12 +243,11 @@ const App = () => {
       <Box
         className='App'
         py={20}
-        sx={
-          {
-            // backgroundImage:
-            //   'url("https://images.unsplash.com/photo-1528818955841-a7f1425131b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8c3RhcnJ5JTIwc2t5fGVufDB8fDB8fA%3D%3D&w=1000&q=80")',
-          }
-        }
+        sx={{
+          backgroundImage:
+            // 'url("https://images.unsplash.com/photo-1528818955841-a7f1425131b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8c3RhcnJ5JTIwc2t5fGVufDB8fDB8fA%3D%3D&w=1000&q=80")',
+            'url("https://images.pexels.com/photos/9474172/pexels-photo-9474172.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")',
+        }}
       >
         <Title order={1} align='center' mb={40}>
           Bedtime Stories
