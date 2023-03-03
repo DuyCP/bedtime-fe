@@ -8,7 +8,7 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BiCustomize } from 'react-icons/bi'
 import { BsMusicNoteList } from 'react-icons/bs'
 import { useMutation, useQuery } from 'react-query'
@@ -131,7 +131,7 @@ const App = () => {
     speed: 1,
     pitch: 0,
     volumeGain: 0,
-    sampleRate: 20_000,
+    sampleRate: 20,
     provider: PROVIDER.GOOGLE,
     voice: voiceList[0].value,
     effectsProfileId: [],
@@ -140,6 +140,7 @@ const App = () => {
   const [audio, setAudio] = useState<null | string>('')
   const [selectedStory, setSelectedStory] = useState({
     _id: 0,
+    index: -1,
     title: '',
     content: '',
   })
@@ -158,7 +159,7 @@ const App = () => {
           volumeGainDb: audioConfig.volumeGain,
           effectsProfileId: audioConfig.effectsProfileId,
           speakingRate: audioConfig.speed,
-          // sampleRateHertz: audioConfig.sampleRate,
+          sampleRateHertz: audioConfig.sampleRate,
         },
       }),
       headers: {
@@ -177,7 +178,12 @@ const App = () => {
       .catch((error) => console.error(error))
   )
 
-  const { error: getStoriesError, data: stories = [] } = useQuery(
+  const {
+    error: getStoriesError,
+    data: stories = [],
+    isLoading: getStoriesLoading,
+    refetch,
+  } = useQuery(
     'stories',
     async () => {
       const params = {
@@ -190,16 +196,21 @@ const App = () => {
       const responseData = await response.json()
       const storyList = responseData.stories.stories
 
-      const promises = storyList.map(async (story) => {
+      const promises = storyList.map(async (story, index) => {
         const detailResponse = await fetch(`${BASE_URL}/story/${story._id}`)
         const detail = await detailResponse.json()
-        return detail.story
+        return { ...detail.story, index }
       })
 
       const storiesWithDetail = await Promise.all(promises)
       return storiesWithDetail
-    }
+    },
+    { enabled: false }
   )
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   if (mutation.error)
     return `An error occurred: ${(mutation.error as any).message}`
@@ -266,22 +277,35 @@ const App = () => {
                 <Box
                   id='story-list'
                   sx={{
-                    maxHeight: 400,
+                    height: 400,
                     overflowY: 'scroll',
                   }}
                 >
-                  {stories.map((story, index) => (
-                    <Box key={index} sx={{ marginBottom: 10 }}>
-                      <StoryItem story={story} onSelect={setSelectedStory} />
-                    </Box>
-                  ))}
+                  {getStoriesLoading ? (
+                    <Text>Loading stories ...</Text>
+                  ) : (
+                    stories.map((story, index) => (
+                      <Box key={index} sx={{ marginBottom: 10 }}>
+                        <StoryItem
+                          isActive={
+                            selectedStory.index === index ||
+                            selectedStory._id === story._id
+                          }
+                          story={story}
+                          onSelect={setSelectedStory}
+                        />
+                      </Box>
+                    ))
+                  )}
                 </Box>
               </Tabs.Panel>
 
               {/* Custom Input */}
               <Tabs.Panel value='custom' pt='xs'>
-                <TextInput minRows={10} ref={inputRef} />
-                <Box sx={{ height: 20 }} />
+                <Box sx={{ height: 400 }}>
+                  <TextInput minRows={15} ref={inputRef} />
+                  <Box sx={{ height: 20 }} />
+                </Box>
               </Tabs.Panel>
             </Tabs>
           </Flex>

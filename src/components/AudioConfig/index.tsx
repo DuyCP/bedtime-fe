@@ -14,7 +14,6 @@ import { useState } from 'react'
 import { IoMdSettings } from 'react-icons/io'
 import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import { effectsProfileIdList, IAudioConfig, voiceList } from '../../App'
-import { GENDER } from '../../enums'
 
 interface IAudioConfigProps {
   audioConfig: IAudioConfig
@@ -26,7 +25,7 @@ const SPEED_OPTIONS = [0.25, 0.5, 0.75, 1.0, 1.5, 1.75, 2, 3, 4]
 const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
   const { audioConfig, setAudioConfig } = props
 
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   return (
     <Stack className='bg-gray-200' spacing={20}>
@@ -97,7 +96,7 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
                   const isActive = audioConfig.speed === speed
                   return (
                     <Chip
-                    key={speed}
+                      key={speed}
                       value={speed}
                       size='xs'
                       checked={isActive}
@@ -155,9 +154,9 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
 
             <Slider
               defaultValue={audioConfig.sampleRate}
-              min={8_000}
-              max={48_000}
-              step={500}
+              min={8}
+              max={48}
+              step={2}
               onChangeEnd={(value) => {
                 setAudioConfig((prev) => ({
                   ...prev,

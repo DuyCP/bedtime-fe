@@ -10,11 +10,18 @@ interface IStoryItemProps {
     length: string
     updatedAt: string
   }
-  onSelect: Dispatch<React.SetStateAction<string>>
+  isActive: boolean
+  onSelect: Dispatch<
+    React.SetStateAction<{
+      _id: number
+      title: string
+      content: string
+    }>
+  >
 }
-
+//#1971c2
 const StoryItem = (props: IStoryItemProps) => {
-  const { story, onSelect } = props
+  const { story, isActive, onSelect } = props
 
   const { title, content, source, length } = story
 
@@ -22,12 +29,12 @@ const StoryItem = (props: IStoryItemProps) => {
     <Flex
       justify='space-between'
       sx={{
-        backgroundColor: '#25262b',
+        backgroundColor: isActive ? '#155a9c' : '#25262b',
         borderRadius: 6,
         padding: '10px 20px',
         cursor: 'pointer',
         '&:hover': {
-          backgroundColor: '#1e1e21',
+          backgroundColor: isActive ? '#135088' : '#1e1e21',
         },
       }}
       onClick={() => onSelect(story)}
