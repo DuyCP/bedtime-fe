@@ -159,7 +159,7 @@ const App = () => {
           volumeGainDb: audioConfig.volumeGain,
           effectsProfileId: audioConfig.effectsProfileId,
           speakingRate: audioConfig.speed,
-          sampleRateHertz: audioConfig.sampleRate,
+          // sampleRateHertz: audioConfig.sampleRate,
         },
       }),
       headers: {
@@ -220,7 +220,9 @@ const App = () => {
       console.log('Error: Empty text')
       return
     }
-    await mutation.mutate(text)
+    const shortenedText = text.slice(0, 500)
+    await mutation.mutate(shortenedText)
+    // await mutation.mutate(text)
   }
 
   const getInputText = () => {

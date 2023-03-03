@@ -28,10 +28,13 @@ const AudioPlayer = (props: any) => {
 
   useEffect(() => {
     if (!audio) return
-    console.log('🚀 | useEffect | audio:', audio)
+
+    setIsPlaying(false)
+    if (sound) {
+      sound.pause()
+    }
 
     // Initialize Howler.js
-    // Howler.autoUnlock = false
     const soundObj = new Howl({
       src: props.audio,
       onplay: () => {
@@ -44,7 +47,6 @@ const AudioPlayer = (props: any) => {
         setProgress(progressVal)
       },
     })
-    console.log('🚀 | useEffect | soundObj:', soundObj)
     setSound(soundObj)
   }, [audio])
 
