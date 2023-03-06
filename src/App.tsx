@@ -27,7 +27,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 const GOOGLE_ENDPOINT = `${BASE_URL}/tts/google`
 const AZURE_ENDPOINT = `${BASE_URL}/tts/azure`
 const MAX_CHARS = 2000
-const STORY_LIMIT = 10
+const STORY_LIMIT = 50
 const BACKGROUND_URL =
   'https://media.istockphoto.com/id/904278188/vector/starry-sky-seamless-pattern-white-and-blue-dots-in-galaxy-and-stars-style-repeatable.jpg?s=170667a&w=0&k=20&c=CaWXG_dFxCBMlNNhZp5nvhPuu1SRfTHfUdlJwn_6z_M='
 
