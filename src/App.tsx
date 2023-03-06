@@ -8,7 +8,7 @@ import {
   Stack,
   Tabs,
   Text,
-  Title
+  Title,
 } from '@mantine/core'
 import { BiCustomize } from 'react-icons/bi'
 import { BsMusicNoteList } from 'react-icons/bs'
@@ -111,9 +111,9 @@ export const VOICES = [
   { gender: FEMALE, name: 'vi-VN-Standard-A' },
   { gender: MALE, name: 'vi-VN-Standard-B' },
   { gender: FEMALE, name: 'vi-VN-Standard-C' },
-  { gender: FEMALE, name: 'vi-VN-Standard-D' },
+  { gender: MALE, name: 'vi-VN-Standard-D' },
   { gender: FEMALE, name: 'vi-VN-Wavenet-A' },
-  { gender: FEMALE, name: 'vi-VN-Wavenet-B' },
+  { gender: MALE, name: 'vi-VN-Wavenet-B' },
   { gender: FEMALE, name: 'vi-VN-Wavenet-C' },
   { gender: MALE, name: 'vi-VN-Wavenet-D' },
 ]
