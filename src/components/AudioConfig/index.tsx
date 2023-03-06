@@ -40,7 +40,7 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
         </Flex>
 
         <Box sx={{ cursor: 'pointer' }}>
-          {open ? <MdExpandLess size={20} /> : <MdExpandMore size={20} />}
+          {open ? <MdExpandLess size={28} /> : <MdExpandMore size={28} />}
         </Box>
       </Flex>
 

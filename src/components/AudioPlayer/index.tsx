@@ -5,6 +5,7 @@ import { Box, Button, Flex, Slider, Text } from '@mantine/core'
 import { AiFillPlayCircle } from 'react-icons/ai'
 import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi'
 import { MdPauseCircleFilled } from 'react-icons/md'
+import { formatSeconds } from '../../utils'
 
 const playIconProps = (disabled?: boolean) => {
   return {
@@ -26,6 +27,17 @@ const AudioPlayer = (props: any) => {
 
   const canPlay = audio !== null && audio !== ''
 
+  const onPlayFunction = (id: number) => {
+    console.log('🚀 | onPlayFunction | id:', id)
+    console.log('IS PLAYING')
+    console.log(sound.playing())
+    setTime((prev) => ({ ...prev, current: prev.current + 1 }))
+    setTimeout(onPlayFunction, 1_000) //adjust timeout to fit your needs
+    // if (!isPlaying) {
+    //   return
+    // }
+  }
+
   useEffect(() => {
     if (!audio) return
 
@@ -37,11 +49,16 @@ const AudioPlayer = (props: any) => {
     // Initialize Howler.js
     const soundObj = new Howl({
       src: props.audio,
-      onplay: () => {
-        console.log('duration', sound.duration())
+      html5: true,
+      onplay: (id) => {
+        console.log('🚀 | useEffect | id:', id)
+        console.log('play')
+        console.log(sound)
+        // onPlayFunction(id)
+        // console.log('duration', sound.duration())
       },
       onseek: () => {
-        console.log('Here')
+        console.log('seek')
         setCurrentTime(sound.seek())
         const progressVal = (sound.seek() / time.duration) * 100
         setProgress(progressVal)
@@ -49,6 +66,8 @@ const AudioPlayer = (props: any) => {
     })
     setSound(soundObj)
   }, [audio])
+
+  // useEffect()
 
   const handlePlay = () => {
     if (!canPlay) return
@@ -79,8 +98,8 @@ const AudioPlayer = (props: any) => {
   const noAudio = audio === null || audio === ''
 
   const getDurationInFormat = (seconds: number) => {
-    return Math.ceil(seconds)
-    // return Math.ceil(seconds/60)
+    const sec = Math.ceil(seconds)
+    return formatSeconds(sec)
   }
 
   return (
@@ -174,7 +193,8 @@ const AudioPlayer = (props: any) => {
 
       <Flex gap={4} sx={{ marginInline: 'auto', width: 'fit-content' }}>
         <Text size='sm'>
-          {time.duration ? getDurationInFormat(sound.seek()) : '--'}
+          {time.current ? getDurationInFormat(sound.seek()) : '--'}
+          {/* {time.current ? getDurationInFormat(time.current) : '--'} */}
         </Text>
         <Text size='sm'>/</Text>
         <Text size='sm'>

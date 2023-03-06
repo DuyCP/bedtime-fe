@@ -1,25 +1,22 @@
-import React, { Dispatch } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 
-import { Box, Flex, Stack, Text } from '@mantine/core'
+import { Flex, Stack, Text } from '@mantine/core'
+
+export interface IStory {
+  _id?: number
+  index?: number
+  title: string
+  content: string
+  source: string
+  length: string
+  updatedAt: string
+}
 
 interface IStoryItemProps {
-  story: {
-    title: string
-    content: string
-    source: string
-    length: string
-    updatedAt: string
-  }
+  story: IStory
   isActive: boolean
-  onSelect: Dispatch<
-    React.SetStateAction<{
-      _id: number
-      title: string
-      content: string
-    }>
-  >
+  onSelect: Dispatch<SetStateAction<IStory>>
 }
-//#1971c2
 const StoryItem = (props: IStoryItemProps) => {
   const { story, isActive, onSelect } = props
 

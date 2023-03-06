@@ -15,7 +15,7 @@ import { useMutation, useQuery } from 'react-query'
 import './App.css'
 import AudioConfig from './components/AudioConfig'
 import AudioPlayer from './components/AudioPlayer'
-import StoryItem from './components/StoryItem'
+import StoryItem, { IStory } from './components/StoryItem'
 import TextInput from './components/TextInput'
 import { GENDER, PROVIDER } from './enums'
 
@@ -125,7 +125,7 @@ export const effectsProfileIdList = EFFECTS_PROFILE_ID.map((voice) => ({
   label: voice,
 }))
 
-const App = () => {
+const App = (): JSX.Element => {
   const [provider, setProvider] = useState(PROVIDER.GOOGLE)
   const [audioConfig, setAudioConfig] = useState<IAudioConfig>({
     speed: 1,
@@ -138,15 +138,18 @@ const App = () => {
   })
 
   const [audio, setAudio] = useState<null | string>('')
-  const [selectedStory, setSelectedStory] = useState({
+  const [selectedStory, setSelectedStory] = useState<IStory>({
     _id: 0,
     index: -1,
     title: '',
     content: '',
+    source: '',
+    length: '',
+    updatedAt: '',
   })
-  const inputRef = useRef()
+  const inputRef = useRef<HTMLTextAreaElement | null>()
 
-  const mutation = useMutation((text) =>
+  const mutation = useMutation((text: string) =>
     fetch(getEndpoint(provider), {
       method: 'POST',
       body: JSON.stringify({
@@ -194,7 +197,7 @@ const App = () => {
 
       const response = await fetch(`${BASE_URL}/stories?${queryParams}`)
       const responseData = await response.json()
-      const storyList = responseData.stories.stories
+      const storyList = responseData.stories.stories as IStory[]
 
       const promises = storyList.map(async (story, index) => {
         const detailResponse = await fetch(`${BASE_URL}/story/${story._id}`)
@@ -213,7 +216,7 @@ const App = () => {
   }, [])
 
   if (mutation.error)
-    return `An error occurred: ${(mutation.error as any).message}`
+    return <Text>An error occurred: ${(mutation.error as any).message}</Text>
 
   const handleTextToSpeech = async (text: string) => {
     if (!text) {
@@ -222,7 +225,6 @@ const App = () => {
     }
     const shortenedText = text.slice(0, 500)
     await mutation.mutate(shortenedText)
-    // await mutation.mutate(text)
   }
 
   const getInputText = () => {
@@ -245,14 +247,12 @@ const App = () => {
         py={20}
         sx={{
           position: 'relative',
-          backgroundImage:
-            // 'url("https://images.unsplash.com/photo-1528818955841-a7f1425131b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8c3RhcnJ5JTIwc2t5fGVufDB8fDB8fA%3D%3D&w=1000&q=80")',
-            'url("https://images.pexels.com/photos/9474172/pexels-photo-9474172.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")',
+          // backgroundImage:
+          //   // 'url("https://images.unsplash.com/photo-1528818955841-a7f1425131b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8c3RhcnJ5JTIwc2t5fGVufDB8fDB8fA%3D%3D&w=1000&q=80")',
+          //   'url("https://images.pexels.com/photos/9474172/pexels-photo-9474172.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")',
         }}
       >
-        <div
-        className='overlay'
-        ></div>
+        {/* <div className='overlay'></div> */}
 
         <Title order={1} align='center' mb={40}>
           Bedtime Stories
