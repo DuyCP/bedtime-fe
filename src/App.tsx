@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import {
   Box,
   Button,
+  Container,
   Flex,
   MantineProvider,
   Stack,
@@ -192,15 +193,6 @@ const App = (): JSX.Element => {
     return (inputRef.current as any).value
   }
 
-  // useEffect(() => {
-  //   const element = document.querySelector('body')
-  //   if (mutation.isLoading) {
-  //     element.style.cursor = 'wait'
-  //   } else {
-  //     element.style.cursor = 'default'
-  //   }
-  // }, [mutation.isLoading])
-
   return (
     <MantineProvider
       withGlobalStyles
@@ -213,7 +205,6 @@ const App = (): JSX.Element => {
     >
       <Box
         className='App'
-        py={20}
         sx={{
           position: 'relative',
           backgroundImage: `url("${BACKGROUND_URL}")`,
@@ -221,106 +212,113 @@ const App = (): JSX.Element => {
       >
         <div className='overlay'></div>
 
-        <Title
-          id='title'
-          order={1}
-          align='center'
-          mb={40}
-          sx={{ fontFamily: 'Beth Ellen', color: '#e7e7e7', fontSize: 45 }}
+        <Container
+          size={600}
+          px={40}
+          py={40}
+          sx={{ background: '#131313df', borderRadius: 4 }}
         >
-          Bedtime Stories
-        </Title>
+          <Title
+            id='title'
+            order={1}
+            align='center'
+            mb={40}
+            sx={{ fontFamily: 'Beth Ellen', color: '#e7e7e7', fontSize: 45 }}
+          >
+            Bedtime Stories
+          </Title>
 
-        <Stack sx={{ maxWidth: 600, marginInline: 'auto', gap: 70 }}>
-          <Flex sx={{ width: '100%', marginInline: 'auto' }} gap={20}>
-            <Tabs defaultValue='story' sx={{ width: '100%' }}>
-              <Tabs.List>
-                <Tabs.Tab
-                  value='story'
-                  icon={<BsMusicNoteList size='0.8rem' />}
-                  sx={{ fontSize: 12, width: '50%' }}
-                >
-                  STORY LIST
-                </Tabs.Tab>
-                <Tabs.Tab
-                  value='custom'
-                  icon={<BiCustomize size='0.8rem' />}
-                  sx={{ fontSize: 12, width: '50%' }}
-                >
-                  CUSTOM
-                </Tabs.Tab>
-              </Tabs.List>
+          <Stack sx={{ maxWidth: 600, marginInline: 'auto', gap: 70 }}>
+            <Flex sx={{ width: '100%', marginInline: 'auto' }} gap={20}>
+              <Tabs defaultValue='story' sx={{ width: '100%' }}>
+                <Tabs.List>
+                  <Tabs.Tab
+                    value='story'
+                    icon={<BsMusicNoteList size='0.8rem' />}
+                    sx={{ fontSize: 12, width: '50%' }}
+                  >
+                    STORY LIST
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value='custom'
+                    icon={<BiCustomize size='0.8rem' />}
+                    sx={{ fontSize: 12, width: '50%' }}
+                  >
+                    CUSTOM
+                  </Tabs.Tab>
+                </Tabs.List>
 
-              {/* Story List */}
-              <Tabs.Panel value='story' pt='xs'>
-                <Box
-                  id='story-list'
+                {/* Story List */}
+                <Tabs.Panel value='story' pt='xs'>
+                  <Box
+                    id='story-list'
+                    sx={{
+                      height: 400,
+                      overflowY: 'scroll',
+                    }}
+                  >
+                    {getStoriesLoading ? (
+                      <Text>Loading stories ...</Text>
+                    ) : (
+                      stories.map((story, index) => (
+                        <Box key={index} sx={{ marginBottom: 10 }}>
+                          <StoryItem
+                            isActive={
+                              selectedStory.index === index ||
+                              selectedStory._id === story._id
+                            }
+                            story={story}
+                            onSelect={setSelectedStory}
+                          />
+                        </Box>
+                      ))
+                    )}
+                  </Box>
+                </Tabs.Panel>
+
+                {/* Custom Input */}
+                <Tabs.Panel value='custom' pt='xs'>
+                  <Box sx={{ height: 400 }}>
+                    <TextInput minRows={15} ref={inputRef} />
+                    <Box sx={{ height: 20 }} />
+                  </Box>
+                </Tabs.Panel>
+              </Tabs>
+            </Flex>
+
+            <AudioConfig
+              audioConfig={audioConfig}
+              setAudioConfig={setAudioConfig}
+            />
+
+            <Stack>
+              <>
+                <Button
+                  disabled={mutation.isLoading}
+                  onClick={() =>
+                    handleTextToSpeech(getInputText() || selectedStory.content)
+                  }
                   sx={{
-                    height: 400,
-                    overflowY: 'scroll',
+                    width: 'fit-content',
+                    marginLeft: 'auto',
+                    marginBottom: 20,
                   }}
                 >
-                  {getStoriesLoading ? (
-                    <Text>Loading stories ...</Text>
-                  ) : (
-                    stories.map((story, index) => (
-                      <Box key={index} sx={{ marginBottom: 10 }}>
-                        <StoryItem
-                          isActive={
-                            selectedStory.index === index ||
-                            selectedStory._id === story._id
-                          }
-                          story={story}
-                          onSelect={setSelectedStory}
-                        />
-                      </Box>
-                    ))
-                  )}
-                </Box>
-              </Tabs.Panel>
+                  Convert to Speech
+                </Button>
 
-              {/* Custom Input */}
-              <Tabs.Panel value='custom' pt='xs'>
-                <Box sx={{ height: 400 }}>
-                  <TextInput minRows={15} ref={inputRef} />
-                  <Box sx={{ height: 20 }} />
-                </Box>
-              </Tabs.Panel>
-            </Tabs>
-          </Flex>
+                {/* <AudioPlayer audio={audio} /> */}
+                {audio && <TestPlayer2 audioData={audio} />}
 
-          <AudioConfig
-            audioConfig={audioConfig}
-            setAudioConfig={setAudioConfig}
-          />
-
-          <Stack>
-            <>
-              <Button
-                disabled={mutation.isLoading}
-                onClick={() =>
-                  handleTextToSpeech(getInputText() || selectedStory.content)
-                }
-                sx={{
-                  width: 'fit-content',
-                  marginLeft: 'auto',
-                  marginBottom: 20,
-                }}
-              >
-                Convert to Speech
-              </Button>
-
-              {/* <AudioPlayer audio={audio} /> */}
-              {audio && <TestPlayer2 audioData={audio} />}
-
-              {mutation.error && (
-                <Text size='sm' color='red'>
-                  An error occurred: ${(mutation.error as any).message}
-                </Text>
-              )}
-            </>
+                {mutation.error && (
+                  <Text size='sm' color='red'>
+                    An error occurred: ${(mutation.error as any).message}
+                  </Text>
+                )}
+              </>
+            </Stack>
           </Stack>
-        </Stack>
+        </Container>
       </Box>
     </MantineProvider>
   )
