@@ -5,3 +5,6 @@
 
 html, body{min-height:100%;}
 body{height:100vh;}
+#title {
+    font-family: 'Beth Ellen', cursive;
+}

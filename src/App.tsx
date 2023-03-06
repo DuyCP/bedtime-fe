@@ -24,6 +24,10 @@ import './App.css'
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const GOOGLE_ENDPOINT = `${BASE_URL}/tts/google`
 const AZURE_ENDPOINT = `${BASE_URL}/tts/azure`
+const MAX_CHARS = 2000
+const STORY_LIMIT = 10
+const BACKGROUND_URL =
+  'https://media.istockphoto.com/id/904278188/vector/starry-sky-seamless-pattern-white-and-blue-dots-in-galaxy-and-stars-style-repeatable.jpg?s=170667a&w=0&k=20&c=CaWXG_dFxCBMlNNhZp5nvhPuu1SRfTHfUdlJwn_6z_M='
 
 const getEndpoint = (provider: string) => {
   switch (provider) {
@@ -46,7 +50,6 @@ export interface IAudioConfig {
   voice: string
   effectsProfileId: string[]
 }
-const MAX_CHARS = 2000
 
 const EFFECTS_PROFILE_ID = [
   'wearable-class-device',
@@ -146,7 +149,7 @@ const App = (): JSX.Element => {
     async () => {
       const params = {
         page: 1,
-        limit: 10,
+        limit: STORY_LIMIT,
       }
       const queryParams = new URLSearchParams(params as any).toString()
 
@@ -187,6 +190,15 @@ const App = (): JSX.Element => {
     return (inputRef.current as any).value
   }
 
+  // useEffect(() => {
+  //   const element = document.querySelector('body')
+  //   if (mutation.isLoading) {
+  //     element.style.cursor = 'wait'
+  //   } else {
+  //     element.style.cursor = 'default'
+  //   }
+  // }, [mutation.isLoading])
+
   return (
     <MantineProvider
       withGlobalStyles
@@ -202,13 +214,18 @@ const App = (): JSX.Element => {
         py={20}
         sx={{
           position: 'relative',
-          backgroundImage:
-            'url("https://images.pexels.com/photos/9474172/pexels-photo-9474172.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")',
+          backgroundImage: `url("${BACKGROUND_URL}")`,
         }}
       >
         <div className='overlay'></div>
 
-        <Title order={1} align='center' mb={40}>
+        <Title
+          id='title'
+          order={1}
+          align='center'
+          mb={40}
+          sx={{ fontFamily: 'Beth Ellen', color: '#e7e7e7', fontSize: 45 }}
+        >
           Bedtime Stories
         </Title>
 
@@ -282,7 +299,7 @@ const App = (): JSX.Element => {
                 onClick={() =>
                   handleTextToSpeech(getInputText() || selectedStory.content)
                 }
-                sx={{ width: 'fit-content', marginLeft: 'auto' }}
+                sx={{ width: 'fit-content', marginLeft: 'auto', marginBottom: 20 }}
               >
                 Convert to Speech
               </Button>

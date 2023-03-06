@@ -14,7 +14,7 @@ const TestPlayer2 = (props: IProps) => {
 
   return (
     <ReactH5AudioPlayer
-      style={{ backgroundColor: '#25262b', color: 'red' }}
+      style={{ backgroundColor: '#25262b', color: 'red', marginBottom: 40 }}
       src={audioData}
       autoPlayAfterSrcChange={false}
       onPlay={() => console.log('onPlay')}

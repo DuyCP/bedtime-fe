@@ -61,12 +61,11 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
             />
           </Grid.Col>
 
-          <Grid.Col span={6}>
+          {/* <Grid.Col span={6}>
             <MultiSelect
               data={effectsProfileIdList}
               label='Effects profile ID'
               placeholder='Pick one or multiple'
-              // onSelect={(e) => console.log(e)}
               onChange={(e) =>
                 setAudioConfig((prev) => ({
                   ...prev,
@@ -75,7 +74,7 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
               }
               sx={{ width: 250 }}
             />
-          </Grid.Col>
+          </Grid.Col> */}
 
           <Grid.Col span={12}>
             <Text mt='md' size='sm' mb={4}>
@@ -128,7 +127,7 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
             />
           </Grid.Col>
 
-          <Grid.Col span={6}>
+          {/* <Grid.Col span={6}>
             <Text mt='md' size='sm'>
               Volume Gain: {audioConfig.volumeGain}
             </Text>
@@ -145,7 +144,7 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
                 }))
               }}
             />
-          </Grid.Col>
+          </Grid.Col> */}
 
           <Grid.Col span={6}>
             <Text mt='md' size='sm'>

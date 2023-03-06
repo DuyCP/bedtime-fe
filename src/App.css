@@ -6,7 +6,7 @@
 .App {
   height: 100%;
   padding: 40px 20px;
-  background-repeat: no-repeat;
+  /* background-repeat: no-repeat; */
   background-size: cover;
 }
 
