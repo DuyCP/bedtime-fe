@@ -46,54 +46,7 @@ export interface IAudioConfig {
   voice: string
   effectsProfileId: string[]
 }
-
-const STORY_LIST = [
-  {
-    name: 'Sự tích sọ dừa 1',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-  {
-    name: 'Sự tích sọ dừa 2',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-  {
-    name: 'Sự tích sọ dừa 3',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-  {
-    name: 'Sự tích sọ dừa 4',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-  {
-    name: 'Sự tích sọ dừa 5',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-  {
-    name: 'Sự tích sọ dừa 6',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-  {
-    name: 'Sự tích sọ dừa 7',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-  {
-    name: 'Sự tích sọ dừa 8',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-  {
-    name: 'Sự tích sọ dừa 9',
-    type: 'Cổ tích Việt Nam',
-    length: '04:20',
-  },
-]
+const MAX_CHARS = 2000
 
 const EFFECTS_PROFILE_ID = [
   'wearable-class-device',
@@ -225,7 +178,7 @@ const App = (): JSX.Element => {
       console.log('Error: Empty text')
       return
     }
-    const shortenedText = text.slice(0, 500)
+    const shortenedText = text.slice(0, MAX_CHARS)
     await mutation.mutate(shortenedText)
   }
 
@@ -346,10 +299,6 @@ const App = (): JSX.Element => {
             </>
           </Stack>
         </Stack>
-
-        <Box>
-          {/* {audio !== '' && !mutation.isLoading && <AudioPlayer audio={audio} />} */}
-        </Box>
       </Box>
     </MantineProvider>
   )
