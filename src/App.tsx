@@ -147,7 +147,7 @@ const App = (): JSX.Element => {
     length: '',
     updatedAt: '',
   })
-  const inputRef = useRef<HTMLTextAreaElement | null>()
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const mutation = useMutation((text: string) =>
     fetch(getEndpoint(provider), {
