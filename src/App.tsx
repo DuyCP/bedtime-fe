@@ -20,6 +20,7 @@ import TextInput from './components/TextInput'
 import { GENDER, PROVIDER } from './enums'
 
 import './App.css'
+import { shortenText } from './utils'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const GOOGLE_ENDPOINT = `${BASE_URL}/tts/google`
@@ -160,7 +161,8 @@ const App = (): JSX.Element => {
       const promises = storyList.map(async (story, index) => {
         const detailResponse = await fetch(`${BASE_URL}/story/${story._id}`)
         const detail = await detailResponse.json()
-        return { ...detail.story, index }
+        const summary = shortenText(detail.story.content, 15) + '...'
+        return { ...detail.story, index, summary }
       })
 
       const storiesWithDetail = await Promise.all(promises)

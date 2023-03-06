@@ -9,6 +9,7 @@ export interface IStory {
   content: string
   source: string
   length: string
+  summary?: string
   updatedAt: string
 }
 
@@ -20,7 +21,7 @@ interface IStoryItemProps {
 const StoryItem = (props: IStoryItemProps) => {
   const { story, isActive, onSelect } = props
 
-  const { title, content, source, length } = story
+  const { title, content, source, length, summary } = story
 
   return (
     <Flex
@@ -38,7 +39,19 @@ const StoryItem = (props: IStoryItemProps) => {
     >
       <Stack spacing={1}>
         <Text sx={{ fontWeight: 'bold' }}>{title}</Text>
-        <Text size='xs'>{source}</Text>
+        <Text
+          size='xs'
+          sx={
+            {
+              // maxWidth: '350px',
+              // overflow: 'hidden',
+              // whiteSpace: 'nowrap',
+              // textOverflow: 'ellipsis',
+            }
+          }
+        >
+          {summary}
+        </Text>
       </Stack>
 
       <Text size='sm'>{length || '04:20'}</Text>
