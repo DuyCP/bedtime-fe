@@ -8,13 +8,13 @@ import {
   Stack,
   Tabs,
   Text,
-  Title,
+  Title
 } from '@mantine/core'
 import { BiCustomize } from 'react-icons/bi'
 import { BsMusicNoteList } from 'react-icons/bs'
 import { useMutation, useQuery } from 'react-query'
 import AudioConfig from './components/AudioConfig'
-import AudioPlayer from './components/AudioPlayer'
+import TestPlayer2 from './components/AudioPlayer/TestPlayer2'
 import StoryItem, { IStory } from './components/StoryItem'
 import TextInput from './components/TextInput'
 import { GENDER, PROVIDER } from './enums'
@@ -335,7 +335,8 @@ const App = (): JSX.Element => {
                 Convert to Speech
               </Button>
 
-              <AudioPlayer audio={audio} />
+              {/* <AudioPlayer audio={audio} /> */}
+              {audio && <TestPlayer2 audioData={audio} />}
 
               {mutation.error && (
                 <Text size='sm' color='red'>

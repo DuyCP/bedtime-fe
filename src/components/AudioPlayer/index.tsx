@@ -48,13 +48,14 @@ const AudioPlayer = (props: any) => {
 
     // Initialize Howler.js
     const soundObj = new Howl({
-      src: props.audio,
+      src: audio,
       html5: true,
-      onplay: (id) => {
+      onplay: (id, ...params) => {
+        console.log('🚀 | useEffect | params:', params)
         console.log('🚀 | useEffect | id:', id)
         console.log('play')
         console.log(sound)
-        // onPlayFunction(id)
+        onPlayFunction(id)
         // console.log('duration', sound.duration())
       },
       onseek: () => {
@@ -64,6 +65,7 @@ const AudioPlayer = (props: any) => {
         setProgress(progressVal)
       },
     })
+
     setSound(soundObj)
   }, [audio])
 
@@ -124,6 +126,9 @@ const AudioPlayer = (props: any) => {
         },
       })}
     >
+      {/* {audio && <TestPlayer audio={audio}> </TestPlayer>} */}
+     
+
       <Flex justify='center' align='center' gap={10}>
         <BiSkipPrevious
           {...playIconProps()}
