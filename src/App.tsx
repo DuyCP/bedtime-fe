@@ -64,17 +64,17 @@ const EFFECTS_PROFILE_ID = [
 
 const { MALE, FEMALE } = GENDER
 export const VOICES = [
-  { gender: FEMALE, name: 'vi-VN-Standard-A' },
-  { gender: MALE, name: 'vi-VN-Standard-B' },
-  { gender: FEMALE, name: 'vi-VN-Standard-C' },
-  { gender: MALE, name: 'vi-VN-Standard-D' },
-  { gender: FEMALE, name: 'vi-VN-Wavenet-A' },
-  { gender: MALE, name: 'vi-VN-Wavenet-B' },
-  { gender: FEMALE, name: 'vi-VN-Wavenet-C' },
-  { gender: MALE, name: 'vi-VN-Wavenet-D' },
+  { name: 'Cô Chích Bông', gender: FEMALE, code: 'vi-VN-Standard-A' },
+  { name: 'Cô Gấu Trắng', gender: FEMALE, code: 'vi-VN-Standard-C' },
+  { name: 'Cô Vàng Anh', gender: FEMALE, code: 'vi-VN-Wavenet-A' },
+  { name: 'Cô Họa Mi', gender: FEMALE, code: 'vi-VN-Wavenet-C' },
+  { name: 'Chú Oai Vui Vẻ', gender: MALE, code: 'vi-VN-Standard-B' },
+  { name: 'Chú Hùng Tài Ba', gender: MALE, code: 'vi-VN-Standard-D' },
+  { name: 'Chú Duy Dũng Cảm', gender: MALE, code: 'vi-VN-Wavenet-B' },
+  { name: 'Chú Long Lém Lỉnh ', gender: MALE, code: 'vi-VN-Wavenet-D' },
 ]
 export const voiceList = VOICES.map((voice) => ({
-  value: voice.name,
+  value: voice.code,
   label: voice.name,
   group: voice.gender,
 }))
@@ -299,7 +299,11 @@ const App = (): JSX.Element => {
                 onClick={() =>
                   handleTextToSpeech(getInputText() || selectedStory.content)
                 }
-                sx={{ width: 'fit-content', marginLeft: 'auto', marginBottom: 20 }}
+                sx={{
+                  width: 'fit-content',
+                  marginLeft: 'auto',
+                  marginBottom: 20,
+                }}
               >
                 Convert to Speech
               </Button>

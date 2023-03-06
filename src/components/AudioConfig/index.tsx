@@ -146,7 +146,7 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
             />
           </Grid.Col> */}
 
-          <Grid.Col span={6}>
+          {/* <Grid.Col span={6}>
             <Text mt='md' size='sm'>
               Sample Rate: {audioConfig.sampleRate}
             </Text>
@@ -163,7 +163,7 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
                 }))
               }}
             />
-          </Grid.Col>
+          </Grid.Col> */}
         </Grid>
       </Collapse>
     </Stack>
