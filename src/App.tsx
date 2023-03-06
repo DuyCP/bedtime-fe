@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
+
 import {
   Box,
   Button,
@@ -8,18 +10,18 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import { useEffect, useRef, useState } from 'react'
 import { BiCustomize } from 'react-icons/bi'
 import { BsMusicNoteList } from 'react-icons/bs'
 import { useMutation, useQuery } from 'react-query'
-import './App.css'
 import AudioConfig from './components/AudioConfig'
 import AudioPlayer from './components/AudioPlayer'
 import StoryItem, { IStory } from './components/StoryItem'
 import TextInput from './components/TextInput'
 import { GENDER, PROVIDER } from './enums'
 
-const BASE_URL = 'http://localhost:3000/api'
+import './App.css'
+
+const BASE_URL = import.meta.env.VITE_BASE_URL
 const GOOGLE_ENDPOINT = `${BASE_URL}/tts/google`
 const AZURE_ENDPOINT = `${BASE_URL}/tts/azure`
 
@@ -343,6 +345,7 @@ const App = (): JSX.Element => {
             </>
           </Stack>
         </Stack>
+
         <Box>
           {/* {audio !== '' && !mutation.isLoading && <AudioPlayer audio={audio} />} */}
         </Box>
