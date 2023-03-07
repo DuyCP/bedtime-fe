@@ -5,7 +5,6 @@ import {
   Button,
   Container,
   Flex,
-  Loader,
   MantineProvider,
   Stack,
   Tabs,
@@ -19,82 +18,35 @@ import AudioConfig from './components/AudioConfig'
 import AudioPlayer from './components/AudioPlayer'
 import StoryItem, { IStory } from './components/StoryItem'
 import TextInput from './components/TextInput'
-import { GENDER, PROVIDER } from './enums'
-
-import './App.css'
+import { GENDER } from './enums'
 import { shortenText } from './utils'
 
-const BASE_URL = import.meta.env.VITE_BASE_URL
-const GOOGLE_ENDPOINT = `${BASE_URL}/tts/google`
-const AZURE_ENDPOINT = `${BASE_URL}/tts/azure`
-const MAX_CHARS = 2000
-const STORY_LIMIT = 50
-const BACKGROUND_URL =
-  'https://media.istockphoto.com/id/904278188/vector/starry-sky-seamless-pattern-white-and-blue-dots-in-galaxy-and-stars-style-repeatable.jpg?s=170667a&w=0&k=20&c=CaWXG_dFxCBMlNNhZp5nvhPuu1SRfTHfUdlJwn_6z_M='
-
-const getEndpoint = (provider: string) => {
-  switch (provider) {
-    case PROVIDER.GOOGLE:
-    default: {
-      return GOOGLE_ENDPOINT
-    }
-    case PROVIDER.AZURE: {
-      return AZURE_ENDPOINT
-    }
-  }
-}
+import './App.css'
+import {
+  BACKGROUND_URL,
+  BASE_URL,
+  GOOGLE_ENDPOINT,
+  MAX_CHARS,
+  STORY_LIMIT,
+  VOICE_LIST,
+} from './constants'
 
 export interface IAudioConfig {
   speed: number
   pitch: number
   volumeGain: number
   sampleRate: number
-  provider: string
   voice: string
   effectsProfileId: string[]
 }
 
-const EFFECTS_PROFILE_ID = [
-  'wearable-class-device',
-  'handset-class-device',
-  'headphone-class-device',
-  'small-bluetooth-speaker-class-device',
-  'medium-bluetooth-speaker-class-device',
-  'large-home-entertainment-class-device',
-  'large-automotive-class-device',
-  'telephony-class-application',
-]
-
-const { MALE, FEMALE } = GENDER
-export const VOICES = [
-  { name: 'Cô Chích Bông', gender: FEMALE, code: 'vi-VN-Standard-A' },
-  { name: 'Cô Gấu Trắng', gender: FEMALE, code: 'vi-VN-Standard-C' },
-  { name: 'Cô Vàng Anh', gender: FEMALE, code: 'vi-VN-Wavenet-A' },
-  { name: 'Cô Họa Mi', gender: FEMALE, code: 'vi-VN-Wavenet-C' },
-  { name: 'Chú Oai Vui Vẻ', gender: MALE, code: 'vi-VN-Standard-B' },
-  { name: 'Chú Hùng Tài Ba', gender: MALE, code: 'vi-VN-Standard-D' },
-  { name: 'Chú Duy Dũng Cảm', gender: MALE, code: 'vi-VN-Wavenet-B' },
-  { name: 'Chú Long Lém Lỉnh ', gender: MALE, code: 'vi-VN-Wavenet-D' },
-]
-export const voiceList = VOICES.map((voice) => ({
-  value: voice.code,
-  label: voice.name,
-  group: voice.gender,
-}))
-export const effectsProfileIdList = EFFECTS_PROFILE_ID.map((voice) => ({
-  value: voice,
-  label: voice,
-}))
-
 const App = (): JSX.Element => {
-  const [provider, setProvider] = useState(PROVIDER.GOOGLE)
   const [audioConfig, setAudioConfig] = useState<IAudioConfig>({
     speed: 1,
     pitch: 0,
     volumeGain: 0,
     sampleRate: 20,
-    provider: PROVIDER.GOOGLE,
-    voice: voiceList[0].value,
+    voice: VOICE_LIST[0].value,
     effectsProfileId: [],
   })
 
@@ -111,7 +63,7 @@ const App = (): JSX.Element => {
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const mutation = useMutation((text: string) =>
-    fetch(getEndpoint(provider), {
+    fetch(GOOGLE_ENDPOINT, {
       method: 'POST',
       body: JSON.stringify({
         input: { text },
@@ -308,8 +260,10 @@ const App = (): JSX.Element => {
                   Convert to Speech
                 </Button>
 
-                
-                <AudioPlayer loading={mutation.isLoading} audio={audio || undefined} />
+                <AudioPlayer
+                  loading={mutation.isLoading}
+                  audio={audio || undefined}
+                />
 
                 {mutation.error && (
                   <Text size='sm' color='red'>
