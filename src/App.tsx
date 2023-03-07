@@ -127,6 +127,15 @@ const App = (): JSX.Element => {
       })
 
       const storiesWithDetail = await Promise.all(promises)
+
+      // INFO: On page first load, automatically select the first story
+      if (storyList.length === 0) {
+        const firstStory = storiesWithDetail[0]
+        const shortenedContent = firstStory.content.slice(0, MAX_CHARS)
+        mutation.mutate(shortenedContent)
+        setSelectedStory(firstStory)
+      }
+
       setStoryList((prev) => [...prev, ...storiesWithDetail])
       return storiesWithDetail
     },
@@ -159,6 +168,7 @@ const App = (): JSX.Element => {
   }
 
   const onSelectStory = (story: IStory) => {
+    setSelectedStory(story)
     handleTextToSpeech(story.content)
   }
 
