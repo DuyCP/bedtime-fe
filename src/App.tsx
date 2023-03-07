@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   Flex,
+  Loader,
   MantineProvider,
   Stack,
   Tabs,
@@ -307,8 +308,8 @@ const App = (): JSX.Element => {
                   Convert to Speech
                 </Button>
 
-                {/* <AudioPlayer audio={audio} /> */}
-                {audio && <AudioPlayer audioData={audio} />}
+                
+                <AudioPlayer loading={mutation.isLoading} audio={audio || undefined} />
 
                 {mutation.error && (
                   <Text size='sm' color='red'>

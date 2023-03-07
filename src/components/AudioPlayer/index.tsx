@@ -1,24 +1,32 @@
+import { Box, Loader } from '@mantine/core'
 import React from 'react'
 import ReactH5AudioPlayer from 'react-h5-audio-player'
 import 'react-h5-audio-player/lib/styles.css'
 import './custom.css'
 
 interface IProps {
-  audioData: string
+  audio?: string
+  loading: boolean
 }
 
 const TestPlayer2 = (props: IProps) => {
-  const { audioData } = props
-
-  const audio = new Audio(audioData)
+  const { audio, loading = false } = props
 
   return (
-    <ReactH5AudioPlayer
-      style={{ backgroundColor: '#25262b', color: 'red', marginBottom: 40 }}
-      src={audioData}
-      autoPlayAfterSrcChange={false}
-      onPlay={() => console.log('onPlay')}
-    />
+    <Box mb={40}>
+      <Box mx='auto' mb={10} sx={{ height: 30, width: 'fit-content' }}>
+        {loading && (
+          <Loader size='md' variant='bars' color='#dddddd80' mx='auto' />
+        )}
+      </Box>
+
+      <ReactH5AudioPlayer
+        style={{ backgroundColor: '#25262b', color: 'red' }}
+        src={audio}
+        autoPlayAfterSrcChange={false}
+        onPlay={() => console.log('onPlay')}
+      />
+    </Box>
   )
 }
 
