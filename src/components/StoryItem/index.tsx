@@ -16,8 +16,9 @@ export interface IStory {
 interface IStoryItemProps {
   story: IStory
   isActive: boolean
-  onSelect: Dispatch<SetStateAction<IStory>>
+  onSelect: (story: IStory) => void
 }
+
 const StoryItem = (props: IStoryItemProps) => {
   const { story, isActive, onSelect } = props
 
@@ -39,19 +40,7 @@ const StoryItem = (props: IStoryItemProps) => {
     >
       <Stack spacing={1}>
         <Text sx={{ fontWeight: 'bold' }}>{title}</Text>
-        <Text
-          size='xs'
-          sx={
-            {
-              // maxWidth: '350px',
-              // overflow: 'hidden',
-              // whiteSpace: 'nowrap',
-              // textOverflow: 'ellipsis',
-            }
-          }
-        >
-          {summary}
-        </Text>
+        <Text size='xs'>{summary}</Text>
       </Stack>
 
       <Text size='sm'>{length || '04:20'}</Text>

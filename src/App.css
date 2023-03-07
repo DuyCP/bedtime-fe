@@ -29,9 +29,9 @@ body > *:not(.overlay) {
   width: 3px;
 }
 
-.scroll-list:-webkit-scrollbar-track {
-  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
-}
+/* .scroll-list:-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+} */
 
 .scroll-list:-webkit-scrollbar-thumb {
   background-color: gray;

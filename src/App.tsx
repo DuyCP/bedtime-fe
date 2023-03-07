@@ -158,6 +158,10 @@ const App = (): JSX.Element => {
     setPage((prev) => prev + 1)
   }
 
+  const onSelectStory = (story: IStory) => {
+    handleTextToSpeech(story.content)
+  }
+
   return (
     <MantineProvider
       withGlobalStyles
@@ -188,12 +192,27 @@ const App = (): JSX.Element => {
             order={1}
             align='center'
             mb={40}
-            sx={{ fontFamily: 'Beth Ellen', color: '#e7e7e7', fontSize: 45 }}
+            sx={{ fontFamily: 'Beth Ellen', color: '#e7e7e7', fontSize: 35 }}
           >
             Bedtime Stories
           </Title>
 
-          <Stack sx={{ maxWidth: 600, marginInline: 'auto', gap: 70 }}>
+          <Stack sx={{ maxWidth: 600, marginInline: 'auto', gap: 0 }}>
+            <Stack>
+              <>
+                <AudioPlayer
+                  loading={mutation.isLoading}
+                  audio={audio || undefined}
+                />
+
+                {mutation.error && (
+                  <Text size='sm' color='red'>
+                    An error occurred: ${(mutation.error as any).message}
+                  </Text>
+                )}
+              </>
+            </Stack>
+
             <Flex sx={{ width: '100%', marginInline: 'auto' }} gap={20}>
               <Tabs defaultValue='story' sx={{ width: '100%' }}>
                 <Tabs.List>
@@ -232,7 +251,7 @@ const App = (): JSX.Element => {
                               selectedStory._id === story._id
                             }
                             story={story}
-                            onSelect={setSelectedStory}
+                            onSelect={onSelectStory}
                           />
                         </Box>
                       ))}
@@ -241,48 +260,28 @@ const App = (): JSX.Element => {
                 </Tabs.Panel>
 
                 {/* Custom Input */}
-                <Tabs.Panel value='custom' pt='xs'>
-                  <Box sx={{ height: 400 }}>
-                    <TextInput minRows={15} ref={inputRef} />
-                    <Box sx={{ height: 20 }} />
-                  </Box>
+                <Tabs.Panel value='custom' pt='xs' sx={{ height: 410 }}>
+                  <TextInput minRows={12} ref={inputRef} />
+
+                  <Button
+                    disabled={mutation.isLoading}
+                    onClick={() => handleTextToSpeech(getInputText())}
+                    sx={{
+                      width: 'fit-content',
+                      marginLeft: 'auto',
+                      marginTop: 20,
+                    }}
+                  >
+                    Convert to Speech
+                  </Button>
                 </Tabs.Panel>
               </Tabs>
             </Flex>
 
-            <AudioConfig
+            {/* <AudioConfig
               audioConfig={audioConfig}
               setAudioConfig={setAudioConfig}
-            />
-
-            <Stack>
-              <>
-                <Button
-                  disabled={mutation.isLoading}
-                  onClick={() =>
-                    handleTextToSpeech(getInputText() || selectedStory.content)
-                  }
-                  sx={{
-                    width: 'fit-content',
-                    marginLeft: 'auto',
-                    marginBottom: 20,
-                  }}
-                >
-                  Convert to Speech
-                </Button>
-
-                <AudioPlayer
-                  loading={mutation.isLoading}
-                  audio={audio || undefined}
-                />
-
-                {mutation.error && (
-                  <Text size='sm' color='red'>
-                    An error occurred: ${(mutation.error as any).message}
-                  </Text>
-                )}
-              </>
-            </Stack>
+            /> */}
           </Stack>
         </Container>
       </Box>
@@ -291,4 +290,3 @@ const App = (): JSX.Element => {
 }
 
 export default App
-

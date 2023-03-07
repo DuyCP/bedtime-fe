@@ -14,16 +14,16 @@ const TestPlayer2 = (props: IProps) => {
 
   return (
     <Box mb={40}>
-      <Box mx='auto' mb={10} sx={{ height: 30, width: 'fit-content' }}>
-        {loading && <Loader size='md' variant='bars' color='#dddddd80' />}
-      </Box>
-
       <ReactH5AudioPlayer
         style={{ backgroundColor: '#25262b', color: 'red' }}
         src={audio}
         autoPlayAfterSrcChange={false}
         onPlay={() => console.log('onPlay')}
       />
+
+      <Box mx='auto' mt={10} sx={{ height: 30, width: 'fit-content' }}>
+        {loading && <Loader size='md' variant='bars' color='#dddddd80' />}
+      </Box>
     </Box>
   )
 }

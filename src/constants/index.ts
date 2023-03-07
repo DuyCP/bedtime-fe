@@ -40,5 +40,5 @@ export const AZURE_ENDPOINT = `${BASE_URL}/tts/azure`
 export const MAX_CHARS = 2000
 // const STORY_LIMIT = 50
 export const STORY_LIMIT = 10
-export const BACKGROUND_URL =
-  'https://media.istockphoto.com/id/904278188/vector/starry-sky-seamless-pattern-white-and-blue-dots-in-galaxy-and-stars-style-repeatable.jpg?s=170667a&w=0&k=20&c=CaWXG_dFxCBMlNNhZp5nvhPuu1SRfTHfUdlJwn_6z_M='
+export const BACKGROUND_URL = ''
+//   'https://media.istockphoto.com/id/904278188/vector/starry-sky-seamless-pattern-white-and-blue-dots-in-galaxy-and-stars-style-repeatable.jpg?s=170667a&w=0&k=20&c=CaWXG_dFxCBMlNNhZp5nvhPuu1SRfTHfUdlJwn_6z_M='
