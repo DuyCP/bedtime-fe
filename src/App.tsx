@@ -15,7 +15,7 @@ import { BiCustomize } from 'react-icons/bi'
 import { BsMusicNoteList } from 'react-icons/bs'
 import { useMutation, useQuery } from 'react-query'
 import AudioConfig from './components/AudioConfig'
-import TestPlayer2 from './components/AudioPlayer/TestPlayer2'
+import AudioPlayer from './components/AudioPlayer'
 import StoryItem, { IStory } from './components/StoryItem'
 import TextInput from './components/TextInput'
 import { GENDER, PROVIDER } from './enums'
@@ -308,7 +308,7 @@ const App = (): JSX.Element => {
                 </Button>
 
                 {/* <AudioPlayer audio={audio} /> */}
-                {audio && <TestPlayer2 audioData={audio} />}
+                {audio && <AudioPlayer audioData={audio} />}
 
                 {mutation.error && (
                   <Text size='sm' color='red'>
