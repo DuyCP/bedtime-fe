@@ -14,22 +14,20 @@ import {
 import { BiCustomize } from 'react-icons/bi'
 import { BsMusicNoteList } from 'react-icons/bs'
 import { useMutation, useQuery } from 'react-query'
-import AudioConfig from './components/AudioConfig'
 import AudioPlayer from './components/AudioPlayer'
 import StoryItem, { IStory } from './components/StoryItem'
 import TextInput from './components/TextInput'
 import { shortenText } from './utils'
 
 import './App.css'
+import InfiniteScrollList from './components/InfiniteScrollList'
 import {
-  BACKGROUND_URL,
   BASE_URL,
   GOOGLE_ENDPOINT,
   MAX_CHARS,
   STORY_LIMIT,
   VOICE_LIST,
 } from './constants'
-import InfiniteScrollList from './components/InfiniteScrollList'
 
 interface Item {
   id: string
@@ -182,20 +180,26 @@ const App = (): JSX.Element => {
         spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
       }}
     >
-      <Box
+      <Flex
         className='App'
         sx={{
           position: 'relative',
-          backgroundImage: `url("${BACKGROUND_URL}")`,
+          // backgroundImage: `url("${BACKGROUND_URL}")`,
         }}
       >
-        <div className='overlay'></div>
+        {/* <div className='overlay'></div> */}
 
         <Container
+          id='main'
           size={600}
           px={40}
           py={40}
-          sx={{ background: '#131313df', borderRadius: 4 }}
+          sx={{
+            background: '#131313df',
+            borderRadius: 4,
+            height: 'fit-content',
+            width: 600,
+          }}
         >
           <Title
             id='title'
@@ -294,7 +298,7 @@ const App = (): JSX.Element => {
             /> */}
           </Stack>
         </Container>
-      </Box>
+      </Flex>
     </MantineProvider>
   )
 }

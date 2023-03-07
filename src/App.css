@@ -6,8 +6,10 @@
 .App {
   height: 100%;
   padding: 40px 20px;
-  /* background-repeat: no-repeat; */
-  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .overlay {
@@ -36,5 +38,12 @@ body > *:not(.overlay) {
 .scroll-list:-webkit-scrollbar-thumb {
   background-color: gray;
   outline: 1px solid rgb(65, 65, 65);
+}
+
+#main {
+  background: #3C3B3F;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #322f1f, #3C3B3F);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #322f1f, #3C3B3F); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
 
