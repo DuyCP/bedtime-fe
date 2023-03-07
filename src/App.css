@@ -25,15 +25,15 @@ body > *:not(.overlay) {
   z-index:1;
 }
 
-#story-list::-webkit-scrollbar {
+.scroll-list:-webkit-scrollbar {
   width: 3px;
 }
 
-#story-list::-webkit-scrollbar-track {
+.scroll-list:-webkit-scrollbar-track {
   /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
 }
 
-#story-list::-webkit-scrollbar-thumb {
+.scroll-list:-webkit-scrollbar-thumb {
   background-color: gray;
   outline: 1px solid rgb(65, 65, 65);
 }

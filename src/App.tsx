@@ -18,7 +18,6 @@ import AudioConfig from './components/AudioConfig'
 import AudioPlayer from './components/AudioPlayer'
 import StoryItem, { IStory } from './components/StoryItem'
 import TextInput from './components/TextInput'
-import { GENDER } from './enums'
 import { shortenText } from './utils'
 
 import './App.css'
@@ -30,6 +29,12 @@ import {
   STORY_LIMIT,
   VOICE_LIST,
 } from './constants'
+import InfiniteScrollList from './components/InfiniteScrollList'
+
+interface Item {
+  id: string
+  name: string
+}
 
 export interface IAudioConfig {
   speed: number
@@ -51,6 +56,7 @@ const App = (): JSX.Element => {
   })
 
   const [audio, setAudio] = useState<null | string>('')
+  const [page, setPage] = useState(1)
   const [selectedStory, setSelectedStory] = useState<IStory>({
     _id: 0,
     index: -1,
@@ -60,6 +66,7 @@ const App = (): JSX.Element => {
     length: '',
     updatedAt: '',
   })
+  const [storyList, setStoryList] = useState<IStory[]>([])
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const mutation = useMutation((text: string) =>
@@ -103,16 +110,16 @@ const App = (): JSX.Element => {
     'stories',
     async () => {
       const params = {
-        page: 1,
+        page,
         limit: STORY_LIMIT,
       }
       const queryParams = new URLSearchParams(params as any).toString()
 
       const response = await fetch(`${BASE_URL}/stories?${queryParams}`)
       const responseData = await response.json()
-      const storyList = responseData.stories.stories as IStory[]
+      const storyListData = responseData.stories.stories as IStory[]
 
-      const promises = storyList.map(async (story, index) => {
+      const promises = storyListData.map(async (story, index) => {
         const detailResponse = await fetch(`${BASE_URL}/story/${story._id}`)
         const detail = await detailResponse.json()
         const summary = shortenText(detail.story.content, 15) + '...'
@@ -120,6 +127,7 @@ const App = (): JSX.Element => {
       })
 
       const storiesWithDetail = await Promise.all(promises)
+      setStoryList((prev) => [...prev, ...storiesWithDetail])
       return storiesWithDetail
     },
     { enabled: false }
@@ -127,7 +135,7 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     refetch()
-  }, [])
+  }, [page])
 
   if (mutation.error)
     return <Text>An error occurred: ${(mutation.error as any).message}</Text>
@@ -144,6 +152,10 @@ const App = (): JSX.Element => {
   const getInputText = () => {
     if (!inputRef || !inputRef.current) return ''
     return (inputRef.current as any).value
+  }
+
+  const loadMore = () => {
+    setPage((prev) => prev + 1)
   }
 
   return (
@@ -203,17 +215,16 @@ const App = (): JSX.Element => {
 
                 {/* Story List */}
                 <Tabs.Panel value='story' pt='xs'>
-                  <Box
-                    id='story-list'
-                    sx={{
-                      height: 400,
-                      overflowY: 'scroll',
-                    }}
-                  >
-                    {getStoriesLoading ? (
-                      <Text>Loading stories ...</Text>
-                    ) : (
-                      stories.map((story, index) => (
+                  <Box>
+                    <InfiniteScrollList
+                      onLoadMore={loadMore}
+                      loading={getStoriesLoading}
+                      sx={{
+                        height: 400,
+                        overflowY: 'scroll',
+                      }}
+                    >
+                      {storyList.map((story, index) => (
                         <Box key={index} sx={{ marginBottom: 10 }}>
                           <StoryItem
                             isActive={
@@ -224,8 +235,8 @@ const App = (): JSX.Element => {
                             onSelect={setSelectedStory}
                           />
                         </Box>
-                      ))
-                    )}
+                      ))}
+                    </InfiniteScrollList>
                   </Box>
                 </Tabs.Panel>
 
@@ -280,3 +291,4 @@ const App = (): JSX.Element => {
 }
 
 export default App
+

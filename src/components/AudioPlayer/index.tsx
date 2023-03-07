@@ -15,9 +15,7 @@ const TestPlayer2 = (props: IProps) => {
   return (
     <Box mb={40}>
       <Box mx='auto' mb={10} sx={{ height: 30, width: 'fit-content' }}>
-        {loading && (
-          <Loader size='md' variant='bars' color='#dddddd80' mx='auto' />
-        )}
+        {loading && <Loader size='md' variant='bars' color='#dddddd80' />}
       </Box>
 
       <ReactH5AudioPlayer

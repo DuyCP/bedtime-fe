@@ -13,7 +13,8 @@ import {
 import { useState } from 'react'
 import { IoMdSettings } from 'react-icons/io'
 import { MdExpandLess, MdExpandMore } from 'react-icons/md'
-import { effectsProfileIdList, IAudioConfig, voiceList } from '../../App'
+import { IAudioConfig } from '../../App'
+import { VOICE_LIST } from '../../constants'
 
 interface IAudioConfigProps {
   audioConfig: IAudioConfig
@@ -49,8 +50,8 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
           <Grid.Col span={6}>
             <Select
               label='Voice'
-              defaultValue={voiceList[0].value}
-              data={voiceList}
+              defaultValue={VOICE_LIST[0].value}
+              data={VOICE_LIST}
               onChange={(e) =>
                 setAudioConfig((prev) => ({
                   ...prev,
