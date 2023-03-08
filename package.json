@@ -25,6 +25,7 @@
     "react-h5-audio-player": "^3.8.6",
     "react-icons": "^4.7.1",
     "react-query": "^3.39.3",
+    "react-router-dom": "^6.8.2",
     "wavesurfer.js": "^6.4.0"
   },
   "devDependencies": {
