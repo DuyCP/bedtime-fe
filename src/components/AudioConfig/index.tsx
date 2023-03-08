@@ -13,8 +13,8 @@ import {
 import { useState } from 'react'
 import { IoMdSettings } from 'react-icons/io'
 import { MdExpandLess, MdExpandMore } from 'react-icons/md'
-import { IAudioConfig } from '../../App'
 import { VOICE_LIST } from '../../constants'
+import { IAudioConfig } from '../Main'
 
 interface IAudioConfigProps {
   audioConfig: IAudioConfig

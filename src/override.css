@@ -1,0 +1,29 @@
+.mantine-Tabs-tab {
+    background: transparent;
+    padding: 10px;
+    gap: 10px;
+    width: 167.5px;
+    height: 44px;
+    border: 1px solid #6741D9;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.mantine-Tabs-tabIcon {
+    margin-right: 0 !important;
+}
+
+[data-active=true].mantine-Tabs-tab {
+    background: #E5DBFF;
+    color: #212529;
+}
+
+.mantine-Tabs-tab:hover {
+    background:#f1edfd;
+}
+
+[data-active=true].mantine-Tabs-tab:hover {
+    background:#E5DBFF;
+}
