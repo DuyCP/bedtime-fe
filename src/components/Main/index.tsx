@@ -192,7 +192,7 @@ const Main = (): JSX.Element => {
 
   return (
     <Flex
-      className='App'
+      //   className='App'
       sx={{
         position: 'relative',
         // backgroundImage: `url("${BACKGROUND_URL}")`,
@@ -206,7 +206,6 @@ const Main = (): JSX.Element => {
           background: '#F4F5FC',
           borderRadius: 4,
           height: 'fit-content',
-          width: 600,
         }}
       >
         {/* <Title
@@ -246,14 +245,14 @@ const Main = (): JSX.Element => {
                 <Tabs.Tab
                   value='story'
                   icon={<NoteIcon color={isStoryTab ? '#6741D9' : ''} />}
-                  sx={{ fontSize: 12, width: '50%' }}
+                  sx={{ fontSize: 12 }}
                 >
                   Danh sách
                 </Tabs.Tab>
                 <Tabs.Tab
                   value='custom'
                   icon={<AddIcon color={isCustomTab ? '#6741D9' : ''} />}
-                  sx={{ fontSize: 12, width: '50%' }}
+                  sx={{ fontSize: 12 }}
                 >
                   Thêm truyện
                 </Tabs.Tab>
@@ -266,7 +265,7 @@ const Main = (): JSX.Element => {
                     onLoadMore={loadMore}
                     loading={getStoriesLoading}
                     sx={{
-                      height: 400,
+                      height: 516,
                       overflowY: 'scroll',
                     }}
                   >

@@ -54,7 +54,7 @@ const StoryItem = (props: IStoryItemProps) => {
         <Flex gap={10}>
           <Image
             radius='md'
-            src='https://images.unsplash.com/photo-1627552245715-77d79bbf6fe2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80'
+            src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY-MBiZ8Q5msCkgClMNC_VaJZVhNOCmwMC68XXMhbJ3xb5Ei0OHftU2cybZce1lX3XZLE&usqp=CAU'
             alt='Random unsplash image'
             width={50}
             height={50}
