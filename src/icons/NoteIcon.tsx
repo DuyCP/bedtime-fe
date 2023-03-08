@@ -4,7 +4,7 @@ import { IIconProps } from './MicIcon'
 const NoteIcon = (props: IIconProps) => {
   const { color } = props
   const defaultColor = '#6741D9'
-  const iconcColor = color || defaultColor
+  const iconColor = color || defaultColor
 
   return (
     <svg
@@ -30,14 +30,14 @@ const NoteIcon = (props: IIconProps) => {
       />
       <path
         d='M13.39 8.53003L18.24 9.76003'
-        stroke={iconcColor}
+        stroke={iconColor}
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'
       />
       <path
         d='M12.41 12.4L15.31 13.14'
-        stroke={iconcColor}
+        stroke={iconColor}
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'

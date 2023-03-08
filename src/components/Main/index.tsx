@@ -32,6 +32,7 @@ import {
 import { initGA, logPageView } from '../../analytics'
 import MicIcon from '../../icons/MicIcon'
 import NoteIcon from '../../icons/NoteIcon'
+import AddIcon from '../../icons/AddIcon'
 
 interface Item {
   id: string
@@ -59,6 +60,7 @@ const Main = (): JSX.Element => {
     })
   }, [])
 
+  const [activeTab, setActiveTab] = useState<string>('story')
   const [audioConfig, setAudioConfig] = useState<IAudioConfig>({
     speed: 1,
     pitch: 0,
@@ -185,6 +187,9 @@ const Main = (): JSX.Element => {
     handleTextToSpeech(story.content)
   }
 
+  const isStoryTab = activeTab === 'story'
+  const isCustomTab = activeTab === 'custom'
+
   return (
     <Flex
       className='App'
@@ -231,21 +236,26 @@ const Main = (): JSX.Element => {
           </Stack>
 
           <Flex sx={{ width: '100%', marginInline: 'auto' }}>
-            <Tabs variant='pills' defaultValue='story' sx={{ width: '100%' }}>
+            <Tabs
+              variant='pills'
+              defaultValue='story'
+              sx={{ width: '100%' }}
+              onTabChange={(value) => setActiveTab(value as string)}
+            >
               <Tabs.List>
                 <Tabs.Tab
                   value='story'
-                  icon={<MicIcon />}
+                  icon={<NoteIcon color={isStoryTab ? '#6741D9' : ''} />}
                   sx={{ fontSize: 12, width: '50%' }}
                 >
-                  Story List
+                  Danh sách
                 </Tabs.Tab>
                 <Tabs.Tab
                   value='custom'
-                  icon={<NoteIcon />}
+                  icon={<AddIcon color={isCustomTab ? '#6741D9' : ''} />}
                   sx={{ fontSize: 12, width: '50%' }}
                 >
-                  Custom Voice
+                  Thêm truyện
                 </Tabs.Tab>
               </Tabs.List>
 
