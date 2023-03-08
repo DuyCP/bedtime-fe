@@ -30,7 +30,7 @@ const App = (): JSX.Element => {
           <Route path='/' element={<Layout />}>
             <Route index element={<Navigate to='/main' />} />
             <Route path='main' element={<Main />} />
-            <Route path='*' element={<span>404</span>} />
+            <Route path='*' element={<Box sx={{ height: '93%' }}></Box>} />
           </Route>
         </Routes>
       </Box>
