@@ -34,6 +34,7 @@ export const effectsProfileIdList = EFFECTS_PROFILE_ID.map((voice) => ({
   label: voice,
 }))
 
+export const TRAKCING_ID = 'UA-259786368-1'
 export const BASE_URL = import.meta.env.VITE_BASE_URL
 export const GOOGLE_ENDPOINT = `${BASE_URL}/tts/google`
 export const AZURE_ENDPOINT = `${BASE_URL}/tts/azure`

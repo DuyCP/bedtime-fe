@@ -18,6 +18,7 @@ import AudioPlayer from './components/AudioPlayer'
 import StoryItem, { IStory } from './components/StoryItem'
 import TextInput from './components/TextInput'
 import { shortenText } from './utils'
+import ReactGA from 'react-ga'
 
 import './App.css'
 import InfiniteScrollList from './components/InfiniteScrollList'
@@ -28,6 +29,7 @@ import {
   STORY_LIMIT,
   VOICE_LIST,
 } from './constants'
+import { initGA, logPageView } from './analytics'
 
 interface Item {
   id: string
@@ -44,6 +46,17 @@ export interface IAudioConfig {
 }
 
 const App = (): JSX.Element => {
+  useEffect(() => {
+    initGA()
+    logPageView()
+    ReactGA.event({
+      action: 'test action',
+      label: 'test label',
+      category: 'test category',
+      value: 100,
+    })
+  }, [])
+
   const [audioConfig, setAudioConfig] = useState<IAudioConfig>({
     speed: 1,
     pitch: 0,
