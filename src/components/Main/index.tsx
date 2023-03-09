@@ -33,6 +33,7 @@ import { initGA, logPageView } from '../../analytics'
 import MicIcon from '../../icons/MicIcon'
 import NoteIcon from '../../icons/NoteIcon'
 import AddIcon from '../../icons/AddIcon'
+import AudioConfig from '../AudioConfig'
 
 interface Item {
   id: string
@@ -247,14 +248,14 @@ const Main = (): JSX.Element => {
                   icon={<NoteIcon color={isStoryTab ? '#6741D9' : ''} />}
                   sx={{ fontSize: 12 }}
                 >
-                  Danh sách
+                  Có sẵn
                 </Tabs.Tab>
                 <Tabs.Tab
                   value='custom'
                   icon={<AddIcon color={isCustomTab ? '#6741D9' : ''} />}
                   sx={{ fontSize: 12 }}
                 >
-                  Thêm truyện
+                  Tạo mới
                 </Tabs.Tab>
               </Tabs.List>
 
@@ -287,19 +288,10 @@ const Main = (): JSX.Element => {
 
               {/* Custom Input */}
               <Tabs.Panel value='custom' pt='xs' sx={{ height: 410 }}>
-                <TextInput minRows={12} ref={inputRef} />
-
-                <Button
-                  disabled={mutation.isLoading}
-                  onClick={() => handleTextToSpeech(getInputText())}
-                  sx={{
-                    width: 'fit-content',
-                    marginLeft: 'auto',
-                    marginTop: 20,
-                  }}
-                >
-                  Convert to Speech
-                </Button>
+                <AudioConfig
+                  audioConfig={audioConfig}
+                  setAudioConfig={setAudioConfig}
+                />
               </Tabs.Panel>
             </Tabs>
           </Flex>

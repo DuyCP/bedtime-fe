@@ -77,7 +77,7 @@ const StoryItem = (props: IStoryItemProps) => {
             </Text>
           </Box>
 
-          <Box>
+          <Box sx={{ marginLeft: 'auto' }}>
             <HeartIcon color={isActive ? 'white' : '#6741D9'} />
           </Box>
         </Flex>

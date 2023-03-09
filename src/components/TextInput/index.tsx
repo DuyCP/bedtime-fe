@@ -1,6 +1,7 @@
 import { forwardRef, Ref } from 'react'
 
-import { Box, Textarea } from '@mantine/core'
+import { useForm } from '@mantine/form'
+import { Box, Button, Checkbox, Group, Textarea } from '@mantine/core'
 
 interface ITextInputProps {
   minRows?: number
