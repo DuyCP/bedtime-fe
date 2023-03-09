@@ -18,7 +18,6 @@ const InfiniteScrollList: FC<PropsWithChildren<IInfiniteScrollListProps>> = (
 ) => {
   const { onLoadMore, sx, loading, children } = props
   const containerRef = useRef<HTMLDivElement>(null)
-  console.log('🚀 | loading:', loading)
 
   const handleScroll = useCallback(() => {
     const container = containerRef.current
@@ -47,12 +46,11 @@ const InfiniteScrollList: FC<PropsWithChildren<IInfiniteScrollListProps>> = (
 
       {loading && (
         <Box mx='auto' mb={10} sx={{ height: 30, width: 'fit-content' }}>
-          <Loader size='lg' variant='dots' color='#dddddd80' />
+          <Loader size='lg' variant='dots' color='#6741D9' />
         </Box>
       )}
     </Box>
   )
 }
-
 
 export default InfiniteScrollList

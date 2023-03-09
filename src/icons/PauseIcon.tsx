@@ -2,16 +2,20 @@ import React from 'react'
 import { IIconProps } from './MicIcon'
 
 const PauseIcon = (props: IIconProps) => {
-  const { color } = props
-  const defaultColor = '#6741D9'
+  const { color, secondaryColor } = props
+  const defaultColor = 'white'
+  const defaultSecondaryColor = '#212529'
   const iconColor = color || defaultColor
+  const iconSecondaryColor = secondaryColor || defaultSecondaryColor
 
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M6.2125 11.1475V2.8525C6.2125 2.065 5.88 1.75 5.04 1.75H2.9225C2.0825 1.75 1.75 2.065 1.75 2.8525V11.1475C1.75 11.935 2.0825 12.25 2.9225 12.25H5.04C5.88 12.25 6.2125 11.935 6.2125 11.1475Z" fill={iconColor}/>
-<path d="M12.2502 11.1475V2.8525C12.2502 2.065 11.9177 1.75 11.0777 1.75H8.96016C8.12599 1.75 7.78766 2.065 7.78766 2.8525V11.1475C7.78766 11.935 8.12016 12.25 8.96016 12.25H11.0777C11.9177 12.25 12.2502 11.935 12.2502 11.1475Z" fill={iconColor}/>
-</svg>
-
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="30" height="30" rx="15" fill={iconSecondaryColor}/>
+    <path d="M14.2125 19.1475V10.8525C14.2125 10.065 13.88 9.75 13.04 9.75H10.9225C10.0825 9.75 9.75 10.065 9.75 10.8525V19.1475C9.75 19.935 10.0825 20.25 10.9225 20.25H13.04C13.88 20.25 14.2125 19.935 14.2125 19.1475Z" fill={iconColor}/>
+    <path d="M20.2502 19.1475V10.8525C20.2502 10.065 19.9177 9.75 19.0777 9.75H16.9602C16.126 9.75 15.7877 10.065 15.7877 10.8525V19.1475C15.7877 19.935 16.1202 20.25 16.9602 20.25H19.0777C19.9177 20.25 20.2502 19.935 20.2502 19.1475Z" fill="#6741D9"/>
+    </svg>
+    
+    
   )
 }
 

@@ -3,10 +3,11 @@ import Main from "./components/Main";
 import Layout from "./components/Layout";
 import { Box, MantineProvider } from "@mantine/core";
 
-import "./App.css";
-import "./override.css";
 import { HomePage } from "./pages/HomePage";
 import { OnboardingPage } from "./pages/OnboardingPage";
+import MyStories from "./components/MyStories";
+import "./App.css";
+import "./override.css";
 
 const App = (): JSX.Element => {
   return (
@@ -33,6 +34,7 @@ const App = (): JSX.Element => {
             <Route index element={<Navigate to="/main" />} />
             <Route path="main" element={<Main />} />
             <Route path="home" element={<HomePage />} />
+            <Route path="my-stories" element={<MyStories />} />
             <Route path="*" element={<Box sx={{ height: "93%" }}></Box>} />
           </Route>
           <Route path="onboarding" element={<OnboardingPage />} />

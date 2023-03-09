@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import {
   Box,
@@ -16,9 +16,9 @@ import { BsMusicNoteList } from 'react-icons/bs'
 import { useMutation, useQuery } from 'react-query'
 import AudioPlayer from '../../components/AudioPlayer'
 import StoryItem, { IStory } from '../../components/StoryItem'
-import TextInput from '../../components/TextInput'
-import { shortenText } from '../../utils'
+import { getS3Url, shortenText } from '../../utils'
 import ReactGA from 'react-ga'
+import axios from 'axios'
 
 import '../../App.css'
 import InfiniteScrollList from '../../components/InfiniteScrollList'
@@ -33,6 +33,7 @@ import { initGA, logPageView } from '../../analytics'
 import MicIcon from '../../icons/MicIcon'
 import NoteIcon from '../../icons/NoteIcon'
 import AddIcon from '../../icons/AddIcon'
+import CreateStory from '../CreateStory'
 
 interface Item {
   id: string
@@ -40,6 +41,7 @@ interface Item {
 }
 
 export interface IAudioConfig {
+  content: string
   speed: number
   pitch: number
   volumeGain: number
@@ -49,19 +51,9 @@ export interface IAudioConfig {
 }
 
 const Main = (): JSX.Element => {
-  useEffect(() => {
-    initGA()
-    logPageView()
-    ReactGA.event({
-      action: 'test action',
-      label: 'test label',
-      category: 'test category',
-      value: 100,
-    })
-  }, [])
-
   const [activeTab, setActiveTab] = useState<string>('story')
   const [audioConfig, setAudioConfig] = useState<IAudioConfig>({
+    content: '',
     speed: 1,
     pitch: 0,
     volumeGain: 0,
@@ -77,43 +69,96 @@ const Main = (): JSX.Element => {
     index: -1,
     title: '',
     content: '',
-    source: '',
-    length: '',
+    duration: 0,
     updatedAt: '',
+    categories: [],
+    approvedAt: '',
+    banner: '',
+    tags: [],
+    listened: 0,
+    status: '',
   })
   const [storyList, setStoryList] = useState<IStory[]>([])
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const playerRef = useRef<any>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
 
-  const mutation = useMutation((text: string) =>
-    fetch(GOOGLE_ENDPOINT, {
-      method: 'POST',
-      body: JSON.stringify({
-        input: { text },
-        voice: {
-          name: audioConfig.voice,
-        },
-        audioConfig: {
-          pitch: audioConfig.pitch,
-          volumeGainDb: audioConfig.volumeGain,
-          effectsProfileId: audioConfig.effectsProfileId,
-          speakingRate: audioConfig.speed,
-          // sampleRateHertz: audioConfig.sampleRate,
-        },
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
+  useEffect(() => {
+    initGA()
+    logPageView()
+    ReactGA.event({
+      action: 'test action',
+      label: 'test label',
+      category: 'test category',
+      value: 100,
     })
-      .then((response) => response.blob())
-      .then((url) => {
+  }, [])
+
+  const mutation = useMutation(
+    async (config: IAudioConfig) => {
+      try {
+        const response = await axios.post(
+          GOOGLE_ENDPOINT,
+          {
+            input: { text: config.content },
+            voice: {
+              name: config.voice,
+            },
+            audioConfig: {
+              pitch: config.pitch,
+              volumeGainDb: config.volumeGain,
+              effectsProfileId: config.effectsProfileId,
+              speakingRate: config.speed,
+              // sampleRateHertz: config.sampleRate,
+            },
+          },
+          {
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+            responseType: 'blob',
+          }
+        )
+
         const reader = new FileReader()
-        reader.readAsDataURL(url)
+        reader.readAsDataURL(response.data)
         reader.onloadend = () => {
           const audioData = reader.result as string
           setAudio(audioData)
         }
-      })
-      .catch((error) => console.error(error))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    // fetch(GOOGLE_ENDPOINT, {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     input: { text: config.content },
+    //     voice: {
+    //       name: config.voice,
+    //     },
+    //     audioConfig: {
+    //       pitch: config.pitch,
+    //       volumeGainDb: config.volumeGain,
+    //       effectsProfileId: config.effectsProfileId,
+    //       speakingRate: config.speed,
+    //       // sampleRateHertz: config.sampleRate,
+    //     },
+    //   }),
+    //   headers: {
+    //     'Content-type': 'application/json; charset=UTF-8',
+    //   },
+    // })
+    //   .then((response) => response.blob())
+    //   .then((url) => {
+    //     const reader = new FileReader()
+    //     reader.readAsDataURL(url)
+    //     reader.onloadend = () => {
+    //       const audioData = reader.result as string
+    //       setAudio(audioData)
+    //     }
+    //   })
+    //   .catch((error) => console.error(error))
   )
 
   const {
@@ -122,7 +167,7 @@ const Main = (): JSX.Element => {
     isLoading: getStoriesLoading,
     refetch,
   } = useQuery(
-    'stories',
+    'api/stories',
     async () => {
       const params = {
         page,
@@ -130,24 +175,40 @@ const Main = (): JSX.Element => {
       }
       const queryParams = new URLSearchParams(params as any).toString()
 
-      const response = await fetch(`${BASE_URL}/stories?${queryParams}`)
+      const response = await fetch(`${BASE_URL}/api/stories?${queryParams}`)
       const responseData = await response.json()
-      const storyListData = responseData.stories.stories as IStory[]
+      const storyListData = responseData.stories as IStory[]
+      console.log('🚀 | storyListData:', storyListData)
 
-      const promises = storyListData.map(async (story, index) => {
-        const detailResponse = await fetch(`${BASE_URL}/stories/${story._id}`)
-        const detail = await detailResponse.json()
-        const summary = shortenText(detail.story.content, 15) + '...'
-        return { ...detail.story, index, summary }
+      // const promises = storyListData.map(async (story, index) => {
+      //   const detailResponse = await fetch(
+      //     `${BASE_URL}/api/stories/${story._id}`
+      //   )
+      //   const detail = await detailResponse.json()
+      //   const summary = shortenText(detail.content, 15) + '...'
+      //   return { ...detail, index, summary }
+      // })
+
+      // const storiesWithDetail = await Promise.all(promises)
+      const storiesWithDetail = storyListData.map((story) => {
+        const metadata = (story as any).versions[0].metadata as any
+        const duration = metadata.duration
+        return {
+          ...story,
+          duration: Math.ceil(duration),
+          banner: getS3Url(story.banner),
+        } as IStory
       })
-
-      const storiesWithDetail = await Promise.all(promises)
+      console.log(
+        '🚀 | storiesWithDetail | storiesWithDetail:',
+        storiesWithDetail
+      )
 
       // INFO: On page first load, automatically select the first story
       if (storyList.length === 0) {
         const firstStory = storiesWithDetail[0]
         const shortenedContent = firstStory.content.slice(0, MAX_CHARS)
-        mutation.mutate(shortenedContent)
+        mutation.mutate({ ...audioConfig, content: shortenedContent })
         setSelectedStory(firstStory)
       }
 
@@ -170,12 +231,7 @@ const Main = (): JSX.Element => {
       return
     }
     const shortenedText = text.slice(0, MAX_CHARS)
-    await mutation.mutate(shortenedText)
-  }
-
-  const getInputText = () => {
-    if (!inputRef || !inputRef.current) return ''
-    return (inputRef.current as any).value
+    await mutation.mutate({ ...audioConfig, content: shortenedText })
   }
 
   const loadMore = () => {
@@ -187,17 +243,23 @@ const Main = (): JSX.Element => {
     handleTextToSpeech(story.content)
   }
 
+  const playStory = () => {
+    if (playerRef && playerRef.current) {
+      playerRef.current.audio.current.play()
+    }
+  }
+
+  useImperativeHandle(playerRef, () => ({
+    getAudioElement: () => {
+      return playerRef.current.audio.current
+    },
+  }))
+
   const isStoryTab = activeTab === 'story'
   const isCustomTab = activeTab === 'custom'
 
   return (
-    <Flex
-      //   className='App'
-      sx={{
-        position: 'relative',
-        // backgroundImage: `url("${BACKGROUND_URL}")`,
-      }}
-    >
+    <Flex>
       <Container
         id='main'
         size={380}
@@ -224,6 +286,8 @@ const Main = (): JSX.Element => {
               <AudioPlayer
                 loading={mutation.isLoading}
                 audio={audio || undefined}
+                setIsPlaying={setIsPlaying}
+                ref={playerRef}
               />
 
               {mutation.error && (
@@ -247,14 +311,14 @@ const Main = (): JSX.Element => {
                   icon={<NoteIcon color={isStoryTab ? '#6741D9' : ''} />}
                   sx={{ fontSize: 12 }}
                 >
-                  Danh sách
+                  Có sẵn
                 </Tabs.Tab>
                 <Tabs.Tab
                   value='custom'
                   icon={<AddIcon color={isCustomTab ? '#6741D9' : ''} />}
                   sx={{ fontSize: 12 }}
                 >
-                  Thêm truyện
+                  Tạo mới
                 </Tabs.Tab>
               </Tabs.List>
 
@@ -269,45 +333,37 @@ const Main = (): JSX.Element => {
                       overflowY: 'scroll',
                     }}
                   >
-                    {storyList.map((story, index) => (
-                      <Box key={index} sx={{ marginBottom: 10 }}>
-                        <StoryItem
-                          isActive={
-                            selectedStory.index === index ||
-                            selectedStory._id === story._id
-                          }
-                          story={story}
-                          onSelect={onSelectStory}
-                        />
-                      </Box>
-                    ))}
+                    {storyList.map((story, index) => {
+                      const isActive =
+                        selectedStory.index === index ||
+                        selectedStory._id === story._id
+                      return (
+                        <Box key={index} sx={{ marginBottom: 10 }}>
+                          <StoryItem
+                            isActive={isActive}
+                            story={story}
+                            playStory={playStory}
+                            onSelect={onSelectStory}
+                            isPlaying={isPlaying && isActive}
+                          />
+                        </Box>
+                      )
+                    })}
                   </InfiniteScrollList>
                 </Box>
               </Tabs.Panel>
 
-              {/* Custom Input */}
+              {/* Create Story */}
               <Tabs.Panel value='custom' pt='xs' sx={{ height: 410 }}>
-                <TextInput minRows={12} ref={inputRef} />
-
-                <Button
-                  disabled={mutation.isLoading}
-                  onClick={() => handleTextToSpeech(getInputText())}
-                  sx={{
-                    width: 'fit-content',
-                    marginLeft: 'auto',
-                    marginTop: 20,
-                  }}
-                >
-                  Convert to Speech
-                </Button>
+                <CreateStory
+                  isLoading={mutation.isLoading}
+                  audioConfig={audioConfig}
+                  setAudioConfig={setAudioConfig}
+                  generateAudio={mutation.mutate}
+                />
               </Tabs.Panel>
             </Tabs>
           </Flex>
-
-          {/* <AudioConfig
-              audioConfig={audioConfig}
-              setAudioConfig={setAudioConfig}
-            /> */}
         </Stack>
       </Container>
     </Flex>

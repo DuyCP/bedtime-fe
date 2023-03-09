@@ -21,9 +21,13 @@ const Layout = () => {
 
       <Flex
         sx={{
-          backgroundColor: "#ECEEF9",
           borderTop: `1px solid ${theme.colors.gray[3]}`,
           padding: "10px",
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          background: "#ECEEF9",
+          paddingTop: 10,
         }}
         mx="auto"
         justify="space-around"
@@ -36,6 +40,7 @@ const Layout = () => {
             : theme.colors.gray[6];
           return (
             <Link
+              key={value}
               to={link}
               style={{ textDecoration: "none", cursor: "pointer" }}
               onClick={() => setMenu(value)}

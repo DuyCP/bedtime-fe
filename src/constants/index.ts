@@ -35,11 +35,12 @@ export const effectsProfileIdList = EFFECTS_PROFILE_ID.map((voice) => ({
 }))
 
 export const TRAKCING_ID = 'UA-259786368-1'
+export const S3_URL = import.meta.env.VITE_S3_URL
 export const BASE_URL = import.meta.env.VITE_BASE_URL
-export const GOOGLE_ENDPOINT = `${BASE_URL}/tts/google`
+export const GOOGLE_ENDPOINT = `${BASE_URL}/api/tts/google`
 export const AZURE_ENDPOINT = `${BASE_URL}/tts/azure`
 export const MAX_CHARS = 2000
-// const STORY_LIMIT = 50
 export const STORY_LIMIT = 10
-export const BACKGROUND_URL = ''
-//   'https://media.istockphoto.com/id/904278188/vector/starry-sky-seamless-pattern-white-and-blue-dots-in-galaxy-and-stars-style-repeatable.jpg?s=170667a&w=0&k=20&c=CaWXG_dFxCBMlNNhZp5nvhPuu1SRfTHfUdlJwn_6z_M='
+export const MAX_STORY_CHARS = 1000
+export const DEFAULT_BANNER =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY-MBiZ8Q5msCkgClMNC_VaJZVhNOCmwMC68XXMhbJ3xb5Ei0OHftU2cybZce1lX3XZLE&usqp=CAU'
