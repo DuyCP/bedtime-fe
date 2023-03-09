@@ -135,7 +135,7 @@ const Main = (): JSX.Element => {
       const storyListData = responseData.stories.stories as IStory[]
 
       const promises = storyListData.map(async (story, index) => {
-        const detailResponse = await fetch(`${BASE_URL}/story/${story._id}`)
+        const detailResponse = await fetch(`${BASE_URL}/stories/${story._id}`)
         const detail = await detailResponse.json()
         const summary = shortenText(detail.story.content, 15) + '...'
         return { ...detail.story, index, summary }
