@@ -20,11 +20,13 @@ export interface IStory {
 interface IStoryItemProps {
   story: IStory
   isActive: boolean
+  isPlaying?: boolean
+  playStory: () => void
   onSelect: (story: IStory) => void
 }
 
 const StoryItem = (props: IStoryItemProps) => {
-  const { story, isActive, onSelect } = props
+  const { story, isActive, isPlaying, playStory, onSelect } = props
 
   const { title, content, source, length, summary } = story
 
@@ -88,11 +90,24 @@ const StoryItem = (props: IStoryItemProps) => {
             </Text>
           </Flex>
 
-          <Box>
-            <PlayIcon
-              color={isActive ? '#6741D9' : 'white'}
-              secondaryColor={isActive ? 'white' : '#212529'}
-            />
+          <Box
+            onClick={(e) => {
+              console.log('🚀 | StoryItem | e:', e)
+              e.stopPropagation()
+              playStory()
+            }}
+          >
+            {isPlaying ? (
+              <PauseIcon
+                color={isActive ? '#6741D9' : 'white'}
+                secondaryColor={isActive ? 'white' : '#212529'}
+              />
+            ) : (
+              <PlayIcon
+                color={isActive ? '#6741D9' : 'white'}
+                secondaryColor={isActive ? 'white' : '#212529'}
+              />
+            )}
           </Box>
         </Flex>
       </Stack>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import {
   Box,
@@ -16,7 +16,6 @@ import { BsMusicNoteList } from 'react-icons/bs'
 import { useMutation, useQuery } from 'react-query'
 import AudioPlayer from '../../components/AudioPlayer'
 import StoryItem, { IStory } from '../../components/StoryItem'
-import TextInput from '../../components/TextInput'
 import { shortenText } from '../../utils'
 import ReactGA from 'react-ga'
 
@@ -50,17 +49,6 @@ export interface IAudioConfig {
 }
 
 const Main = (): JSX.Element => {
-  useEffect(() => {
-    initGA()
-    logPageView()
-    ReactGA.event({
-      action: 'test action',
-      label: 'test label',
-      category: 'test category',
-      value: 100,
-    })
-  }, [])
-
   const [activeTab, setActiveTab] = useState<string>('story')
   const [audioConfig, setAudioConfig] = useState<IAudioConfig>({
     speed: 1,
@@ -84,6 +72,19 @@ const Main = (): JSX.Element => {
   })
   const [storyList, setStoryList] = useState<IStory[]>([])
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const playerRef = useRef<any>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  useEffect(() => {
+    initGA()
+    logPageView()
+    ReactGA.event({
+      action: 'test action',
+      label: 'test label',
+      category: 'test category',
+      value: 100,
+    })
+  }, [])
 
   const mutation = useMutation((text: string) =>
     fetch(GOOGLE_ENDPOINT, {
@@ -188,6 +189,18 @@ const Main = (): JSX.Element => {
     handleTextToSpeech(story.content)
   }
 
+  const playStory = () => {
+    if (playerRef && playerRef.current) {
+      playerRef.current.audio.current.play()
+    }
+  }
+
+  useImperativeHandle(playerRef, () => ({
+    getAudioElement: () => {
+      return playerRef.current.audio.current
+    },
+  }))
+
   const isStoryTab = activeTab === 'story'
   const isCustomTab = activeTab === 'custom'
 
@@ -225,6 +238,8 @@ const Main = (): JSX.Element => {
               <AudioPlayer
                 loading={mutation.isLoading}
                 audio={audio || undefined}
+                setIsPlaying={setIsPlaying}
+                ref={playerRef}
               />
 
               {mutation.error && (
@@ -270,18 +285,22 @@ const Main = (): JSX.Element => {
                       overflowY: 'scroll',
                     }}
                   >
-                    {storyList.map((story, index) => (
-                      <Box key={index} sx={{ marginBottom: 10 }}>
-                        <StoryItem
-                          isActive={
-                            selectedStory.index === index ||
-                            selectedStory._id === story._id
-                          }
-                          story={story}
-                          onSelect={onSelectStory}
-                        />
-                      </Box>
-                    ))}
+                    {storyList.map((story, index) => {
+                      const isActive =
+                        selectedStory.index === index ||
+                        selectedStory._id === story._id
+                      return (
+                        <Box key={index} sx={{ marginBottom: 10 }}>
+                          <StoryItem
+                            isActive={isActive}
+                            story={story}
+                            playStory={playStory}
+                            onSelect={onSelectStory}
+                            isPlaying={isPlaying && isActive}
+                          />
+                        </Box>
+                      )
+                    })}
                   </InfiniteScrollList>
                 </Box>
               </Tabs.Panel>

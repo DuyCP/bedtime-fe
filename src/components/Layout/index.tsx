@@ -36,6 +36,7 @@ const Layout = () => {
           const menuColor = isActive ? '#6741D9' : '#868E96'
           return (
             <Link
+              key={value}
               to={link}
               style={{ textDecoration: 'none', cursor: 'pointer' }}
               onClick={() => setMenu(value)}
