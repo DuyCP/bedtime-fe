@@ -29,8 +29,6 @@ const StoryItem = (props: IStoryItemProps) => {
   const { title, content, source, length, summary } = story
 
   const textColor = isActive ? '#ffffff' : '#212529'
-  console.log('🚀 | StoryItem | isActive:', isActive)
-  console.log(title)
 
   return (
     <Flex
