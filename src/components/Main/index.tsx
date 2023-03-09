@@ -40,6 +40,7 @@ interface Item {
 }
 
 export interface IAudioConfig {
+  content: string
   speed: number
   pitch: number
   volumeGain: number
@@ -51,6 +52,7 @@ export interface IAudioConfig {
 const Main = (): JSX.Element => {
   const [activeTab, setActiveTab] = useState<string>('story')
   const [audioConfig, setAudioConfig] = useState<IAudioConfig>({
+    content: '',
     speed: 1,
     pitch: 0,
     volumeGain: 0,
@@ -86,20 +88,20 @@ const Main = (): JSX.Element => {
     })
   }, [])
 
-  const mutation = useMutation((text: string) =>
+  const mutation = useMutation((config: IAudioConfig) =>
     fetch(GOOGLE_ENDPOINT, {
       method: 'POST',
       body: JSON.stringify({
-        input: { text },
+        input: { text: config.content },
         voice: {
-          name: audioConfig.voice,
+          name: config.voice,
         },
         audioConfig: {
-          pitch: audioConfig.pitch,
-          volumeGainDb: audioConfig.volumeGain,
-          effectsProfileId: audioConfig.effectsProfileId,
-          speakingRate: audioConfig.speed,
-          // sampleRateHertz: audioConfig.sampleRate,
+          pitch: config.pitch,
+          volumeGainDb: config.volumeGain,
+          effectsProfileId: config.effectsProfileId,
+          speakingRate: config.speed,
+          // sampleRateHertz: config.sampleRate,
         },
       }),
       headers: {
@@ -172,13 +174,9 @@ const Main = (): JSX.Element => {
       return
     }
     const shortenedText = text.slice(0, MAX_CHARS)
-    await mutation.mutate(shortenedText)
+    await mutation.mutate({ ...audioConfig, content: shortenedText })
   }
 
-  const getInputText = () => {
-    if (!inputRef || !inputRef.current) return ''
-    return (inputRef.current as any).value
-  }
 
   const loadMore = () => {
     setPage((prev) => prev + 1)
@@ -206,11 +204,6 @@ const Main = (): JSX.Element => {
 
   return (
     <Flex
-      //   className='App'
-      sx={{
-        position: 'relative',
-        // backgroundImage: `url("${BACKGROUND_URL}")`,
-      }}
     >
       <Container
         id='main'
@@ -305,20 +298,17 @@ const Main = (): JSX.Element => {
                 </Box>
               </Tabs.Panel>
 
-              {/* Custom Input */}
+              {/* Create Story */}
               <Tabs.Panel value='custom' pt='xs' sx={{ height: 410 }}>
                 <CreateStory
+                  isLoading={mutation.isLoading}
                   audioConfig={audioConfig}
                   setAudioConfig={setAudioConfig}
+                  generateAudio={mutation.mutate}
                 />
               </Tabs.Panel>
             </Tabs>
           </Flex>
-
-          {/* <AudioConfig
-              audioConfig={audioConfig}
-              setAudioConfig={setAudioConfig}
-            /> */}
         </Stack>
       </Container>
     </Flex>

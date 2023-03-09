@@ -9,20 +9,23 @@ import {
   TextInput,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { VOICE_LIST } from '../../constants'
+import { UseMutateFunction } from 'react-query'
+import { MAX_STORY_CHARS, VOICE_LIST } from '../../constants'
 import MicIcon from '../../icons/MicIcon'
 import MusicIcon from '../../icons/MusicIcon'
 import { IAudioConfig } from '../Main'
 
 interface IAudioConfigProps {
   audioConfig: IAudioConfig
+  isLoading: boolean
+  generateAudio: UseMutateFunction<void, unknown, IAudioConfig, unknown>
   setAudioConfig: React.Dispatch<React.SetStateAction<IAudioConfig>>
 }
 
 const SPEED_OPTIONS = [0.5, 1.0, 1.5]
 
 const CreateStory = (props: IAudioConfigProps): JSX.Element => {
-  const { audioConfig, setAudioConfig } = props
+  const { audioConfig, isLoading, setAudioConfig, generateAudio } = props
 
   const form = useForm({
     initialValues: {
@@ -42,9 +45,19 @@ const CreateStory = (props: IAudioConfigProps): JSX.Element => {
     console.log('RECORD VOICE')
   }
 
+  const onSubmit = (values: {
+    voice: string
+    title: string
+    content: string
+  }) => {
+    console.log(values)
+    generateAudio({ ...audioConfig, ...values })
+    setAudioConfig((prev) => ({ ...prev, ...values }))
+  }
+
   return (
     <Stack className='bg-gray-200' sx={{ gap: 0 }}>
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <form onSubmit={form.onSubmit(onSubmit)}>
         <Grid gutter='xs'>
           <Grid.Col span={10}>
             <Select
@@ -89,15 +102,17 @@ const CreateStory = (props: IAudioConfigProps): JSX.Element => {
               placeholder='Nhập nội dung...'
               label='Nội dung truyện'
               // ref={ref}
+              maxLength={MAX_STORY_CHARS}
               autosize
               minRows={9}
+              maxRows={9}
               {...form.getInputProps('content')}
             />
           </Grid.Col>
 
           <Grid.Col span={12} pt={0}>
             <Button
-              // disabled={mutation.isLoading}
+              disabled={isLoading}
               // onClick={() => handleTextToSpeech(getInputText())}
               type='submit'
               sx={{
