@@ -1,6 +1,13 @@
+import React, { forwardRef, useEffect, useRef } from 'react'
+
 import { Box, Loader } from '@mantine/core'
-import React, { forwardRef } from 'react'
 import ReactH5AudioPlayer from 'react-h5-audio-player'
+import ForwardIcon from '../../icons/ForwardIcon'
+import LoopIcon from '../../icons/LoopIcon'
+import PauseIcon from '../../icons/PauseIcon'
+import PlayIcon from '../../icons/PlayIcon'
+import PreviousIcon from '../../icons/PreviousIcon'
+
 import 'react-h5-audio-player/lib/styles.css'
 import './custom.css'
 
@@ -14,9 +21,18 @@ const AudioPlayer = forwardRef((props: IProps, ref) => {
   const { audio, setIsPlaying, loading = false } = props
 
   return (
-    <Box sx={{ position: 'relative' }} mb={40}>
+    <Box sx={{ position: 'relative' }}>
       <ReactH5AudioPlayer
-        ref={ref}
+        customIcons={{
+          pause: <PauseIcon color='#ffffff' secondaryColor='#6741D9' />,
+          play: <PlayIcon color='#ffffff' secondaryColor='#6741D9' />,
+          previous: <PreviousIcon />,
+          next: <ForwardIcon />,
+          // loop: <LoopIcon />,
+        }}
+        showSkipControls={true}
+        showJumpControls={false}
+        ref={ref as any}
         style={{ backgroundColor: '#25262b', color: 'red', marginTop: 28 }}
         src={audio}
         autoPlayAfterSrcChange={false}

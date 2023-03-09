@@ -35,11 +35,10 @@ interface IStoryItemProps {
 const StoryItem = (props: IStoryItemProps) => {
   const { story, isActive, isPlaying, playStory, onSelect } = props
 
-  const { title, content, summary, duration, banner, categories } = story
+  const { title, content, duration, banner, categories } = story
 
   const textColor = isActive ? '#ffffff' : '#212529'
   const categoriesText = categories.join(', ')
-  console.log(banner)
 
   return (
     <Flex

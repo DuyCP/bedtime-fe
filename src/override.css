@@ -59,7 +59,7 @@
     width: 6px;
     height: 20px;
     content: '';
-    background: #6741D9;
+    /* background: #6741D9; */
     border-radius: 10px;
     position: absolute;
     left: 0;
