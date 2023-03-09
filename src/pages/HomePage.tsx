@@ -46,7 +46,6 @@ const FAVOURITES = [
 ];
 
 const useStyles = createStyles((theme) => ({
-  main: {},
   searchInput: {
     ".mantine-TextInput-input": {
       borderRadius: "10px",
@@ -150,6 +149,7 @@ export const HomePage: React.FC = () => {
   return (
     <Box
       sx={{ padding: 20, overflow: "auto", maxHeight: "100%" }}
+      pb={87}
       className="scrollbar-hide"
     >
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
