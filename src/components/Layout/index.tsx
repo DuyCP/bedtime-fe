@@ -19,7 +19,14 @@ const Layout = () => {
       <Outlet />
 
       <Flex
-        sx={{ position: 'absolute', bottom: 0, width: '100%' }}
+        sx={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          background: '#ECEEF9',
+          paddingTop: 10,
+          borderTop: '1px solid #DEE2E6',
+        }}
         mx='auto'
         justify='space-around'
         mt='auto'
