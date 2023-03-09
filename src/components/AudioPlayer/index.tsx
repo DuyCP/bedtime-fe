@@ -14,10 +14,10 @@ const AudioPlayer = forwardRef((props: IProps, ref) => {
   const { audio, setIsPlaying, loading = false } = props
 
   return (
-    <Box mb={40}>
+    <Box sx={{ position: 'relative' }} mb={40}>
       <ReactH5AudioPlayer
         ref={ref}
-        style={{ backgroundColor: '#25262b', color: 'red' }}
+        style={{ backgroundColor: '#25262b', color: 'red', marginTop: 28 }}
         src={audio}
         autoPlayAfterSrcChange={false}
         onPlay={() => setIsPlaying(true)}

@@ -1,24 +1,65 @@
+/* Audio Player */
+.rhap_button-clear {
+    /* background-color: red; */
+}
+
+.rhap_container {
+    background-color: transparent !important;
+    border: none;
+    box-shadow: none;
+}
+
+.rhap_button-clear.rhap_repeat-button path,
+.rhap_volume-button path {
+    fill: #495057;
+}
+
 #rhap_current-time,
 .rhap_total-time {
-    color: #C1C2C5;
-}
-
-.mantine-InputWrapper-label {
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 20px;
-    color: #212529;
-    padding-left: 16px;
-    position: relative;
-    margin-bottom: 6px;
-}
-
-.mantine-InputWrapper-label::before {
-    width: 6px;
-    height: 20px;
-    content: '';
-    background: #6741D9;
-    border-radius: 10px;
+    color: #495057;
     position: absolute;
+    font-weight: 700;
+    font-size: 17px;
+}
+
+#rhap_current-time {
+    top: 0;
     left: 0;
+}
+
+.rhap_total-time {
+    top: 0;
+    right: 0;
+}
+
+.rhap_rewind-button path,
+.rhap_forward-button path {
+    fill: #212529
+}
+
+.rhap_play-pause-button {
+    transform: scale(1.5);
+    margin: 0 10px;
+}
+
+.rhap_play-pause-button path {
+    fill: #6741D9;
+}
+
+.rhap_download-progress {
+    background-color: #868E96;
+}
+
+.rhap_progress-filled,
+.rhap_volume-bar {
+    background-color: #967fdb;
+}
+
+.rhap_progress-indicator,
+.rhap_volume-indicator {
+    background-color: #6741D9;
+}
+
+.rhap_volume-container {
+    flex: 0 1 74px;
 }
