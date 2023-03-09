@@ -1,7 +1,16 @@
-import { Button, Grid, Select, Stack, Textarea, TextInput } from '@mantine/core'
+import {
+  Button,
+  Flex,
+  Grid,
+  Group,
+  Select,
+  Stack,
+  Textarea,
+  TextInput,
+} from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useState } from 'react'
 import { VOICE_LIST } from '../../constants'
+import MicIcon from '../../icons/MicIcon'
 import MusicIcon from '../../icons/MusicIcon'
 import { IAudioConfig } from '../Main'
 
@@ -29,17 +38,40 @@ const CreateStory = (props: IAudioConfigProps): JSX.Element => {
     },
   })
 
+  const recordVoice = () => {
+    console.log('RECORD VOICE')
+  }
+
   return (
     <Stack className='bg-gray-200' sx={{ gap: 0 }}>
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
-        <Grid>
-          <Grid.Col span={12}>
+        <Grid gutter='xs'>
+          <Grid.Col span={10}>
             <Select
               label='Chọn giọng đọc'
               defaultValue={VOICE_LIST[0].value}
               data={VOICE_LIST}
               {...form.getInputProps('voice')}
             />
+          </Grid.Col>
+
+          <Grid.Col span={2} sx={{ display: 'flex', alignItems: 'flex-end' }}>
+            <Flex
+              onClick={recordVoice}
+              align='center'
+              justify='center'
+              bg='#F03E3E'
+              sx={{
+                borderRadius: 10,
+                width: 40,
+                height: 40,
+                cursor: 'pointer',
+              }}
+            >
+              <Group position='center' sx={{ transform: 'scale(0.8)' }}>
+                <MicIcon color='white' />
+              </Group>
+            </Flex>
           </Grid.Col>
 
           <Grid.Col span={12}>
