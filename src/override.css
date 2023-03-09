@@ -27,3 +27,19 @@
 [data-active=true].mantine-Tabs-tab:hover {
     background:#E5DBFF;
 }
+
+.mantine-InputWrapper-root {
+    position: relative;
+}
+
+.mantine-InputWrapper-error {
+    position: absolute;
+    left: 10px;
+}
+
+.mantine-Textarea-error {
+    bottom: 2px;
+}
+.mantine-TextInput-error {
+    bottom: -18px;
+}

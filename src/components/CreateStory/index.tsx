@@ -15,12 +15,8 @@ const SPEED_OPTIONS = [0.5, 1.0, 1.5]
 const CreateStory = (props: IAudioConfigProps): JSX.Element => {
   const { audioConfig, setAudioConfig } = props
 
-  const [open, setOpen] = useState(false)
-
   const form = useForm({
     initialValues: {
-      email: '',
-      termsOfService: false,
       voice: VOICE_LIST[0].value,
       title: '',
       content: '',
@@ -28,6 +24,8 @@ const CreateStory = (props: IAudioConfigProps): JSX.Element => {
 
     validate: {
       // email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      title: (value) => (value ? null : 'Hãy điền tiêu đề'),
+      content: (value) => (value ? null : 'Hãy điền nội dung'),
     },
   })
 
@@ -35,22 +33,11 @@ const CreateStory = (props: IAudioConfigProps): JSX.Element => {
     <Stack className='bg-gray-200' sx={{ gap: 0 }}>
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
         <Grid>
-          {/* <Group position='right' mt='md'>
-          <Button type='submit'>Submit</Button>
-        </Group> */}
-
           <Grid.Col span={12}>
             <Select
               label='Chọn giọng đọc'
               defaultValue={VOICE_LIST[0].value}
               data={VOICE_LIST}
-              // onChange={(e) =>
-              //   setAudioConfig((prev) => ({
-              //     ...prev,
-              //     voice: e as string,
-              //   }))
-              // }
-              // sx={{ width: '100%' }}
               {...form.getInputProps('voice')}
             />
           </Grid.Col>
@@ -80,6 +67,7 @@ const CreateStory = (props: IAudioConfigProps): JSX.Element => {
             <Button
               // disabled={mutation.isLoading}
               // onClick={() => handleTextToSpeech(getInputText())}
+              type='submit'
               sx={{
                 width: '100%',
                 marginTop: 10,
