@@ -33,7 +33,7 @@ import { initGA, logPageView } from '../../analytics'
 import MicIcon from '../../icons/MicIcon'
 import NoteIcon from '../../icons/NoteIcon'
 import AddIcon from '../../icons/AddIcon'
-import AudioConfig from '../AudioConfig'
+import CreateStory from '../CreateStory'
 
 interface Item {
   id: string
@@ -288,7 +288,7 @@ const Main = (): JSX.Element => {
 
               {/* Custom Input */}
               <Tabs.Panel value='custom' pt='xs' sx={{ height: 410 }}>
-                <AudioConfig
+                <CreateStory
                   audioConfig={audioConfig}
                   setAudioConfig={setAudioConfig}
                 />

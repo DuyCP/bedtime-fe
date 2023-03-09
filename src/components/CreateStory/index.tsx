@@ -1,24 +1,6 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  Chip,
-  Collapse,
-  Flex,
-  Grid,
-  Group,
-  MultiSelect,
-  Select,
-  Slider,
-  Stack,
-  Text,
-  Textarea,
-  TextInput,
-} from '@mantine/core'
+import { Button, Grid, Select, Stack, Textarea, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useState } from 'react'
-import { IoMdSettings } from 'react-icons/io'
-import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import { VOICE_LIST } from '../../constants'
 import MusicIcon from '../../icons/MusicIcon'
 import { IAudioConfig } from '../Main'
@@ -30,7 +12,7 @@ interface IAudioConfigProps {
 
 const SPEED_OPTIONS = [0.5, 1.0, 1.5]
 
-const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
+const CreateStory = (props: IAudioConfigProps): JSX.Element => {
   const { audioConfig, setAudioConfig } = props
 
   const [open, setOpen] = useState(false)
@@ -224,4 +206,4 @@ const AudioConfig = (props: IAudioConfigProps): JSX.Element => {
   )
 }
 
-export default AudioConfig
+export default CreateStory
