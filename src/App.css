@@ -2,8 +2,6 @@
   height: 100%;
 }
 
-
-
 .App {
   height: 100%;
   padding: 40px 20px;
@@ -12,7 +10,6 @@
   justify-content: center;
   background: black;
 }
-
 
 .scroll-list:-webkit-scrollbar {
   width: 3px;
@@ -27,10 +24,18 @@
   outline: 1px solid rgb(65, 65, 65);
 }
 
-
 #layout {
-  background: #F4F5FC;
+  background: #f4f5fc;
   height: 844px;
 }
 
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
 
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
