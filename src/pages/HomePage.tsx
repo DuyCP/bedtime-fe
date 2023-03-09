@@ -4,19 +4,15 @@ import {
   Card,
   createStyles,
   Image,
+  Skeleton,
   Text,
   TextInput,
   Title,
   useMantineTheme,
 } from "@mantine/core";
 import { Musicnote, Play, SearchNormal1 } from "iconsax-react";
-
-const CATES = [
-  "Truyện Việt Nam",
-  "Truyện nước ngoài",
-  "Truyện cười",
-  "Truyện dân gian",
-];
+import { useQuery } from "react-query";
+import { BASE_URL, S3_URL } from "../constants";
 
 const DEMO_IMG =
   "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1179&q=80";
@@ -88,8 +84,7 @@ const useStyles = createStyles((theme) => ({
       color: "white",
       fontWeight: 700,
       height: "120px",
-      background:
-        "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1179&q=80')",
+
       backgroundSize: "cover",
       borderRadius: 10,
     },
@@ -135,8 +130,6 @@ const useStyles = createStyles((theme) => ({
       },
 
       height: "120px",
-      background:
-        "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1179&q=80')",
       backgroundSize: "cover",
       borderRadius: 10,
     },
@@ -146,6 +139,40 @@ const useStyles = createStyles((theme) => ({
 export const HomePage: React.FC = () => {
   const theme = useMantineTheme();
   const { classes } = useStyles();
+
+  const { data: catesData, isLoading: isCatesLoading } = useQuery(
+    "api/cates",
+    async () => {
+      const response = await fetch(`${BASE_URL}/api/categories`);
+
+      if (!response.ok) {
+        throw new Error("Network response error");
+      }
+
+      return response.json();
+    }
+  );
+
+  const { data: mostReadData, isLoading: isMostReadLoading } = useQuery(
+    "api/mostRead",
+    async () => {
+      const params = {
+        page: 1,
+        limit: 20,
+      };
+      const queryParams = new URLSearchParams(params as any).toString();
+      const response = await fetch(
+        `${BASE_URL}/api/stories/most-read?${queryParams}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response error");
+      }
+
+      return response.json();
+    }
+  );
+
   return (
     <Box
       sx={{ padding: 20, overflow: "auto", maxHeight: "100%" }}
@@ -194,11 +221,21 @@ export const HomePage: React.FC = () => {
           <Title order={1}>Danh mục nổi bật</Title>
         </Box>
         <Box className={classes.cateContainer}>
-          {CATES.map((cate) => (
-            <Card key={cate} id="cateItem">
-              {cate}
-            </Card>
-          ))}
+          {isCatesLoading ? (
+            <Skeleton />
+          ) : (
+            catesData.map((cate: any) => (
+              <Card
+                key={cate.key}
+                id="cateItem"
+                style={{
+                  background: `linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${`${S3_URL}/${cate.banner}`})`,
+                }}
+              >
+                {cate.title}
+              </Card>
+            ))
+          )}
         </Box>
       </Box>
 
@@ -208,30 +245,38 @@ export const HomePage: React.FC = () => {
           <Title order={1}>Top 20</Title>
         </Box>
         <Box className={classes.topStoriesContainer}>
-          {TOP20_STORIES.map((story) => (
-            <Card key={story.name} id="topStory">
-              <Image height={100} src={DEMO_IMG} />
-              <Box
-                sx={{
-                  display: "flex",
-                  padding: "8px",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box>
-                  <Text style={{ fontWeight: "bold" }}>{story.name}</Text>
-                  <Text style={{ fontSize: "11px" }}>{story.num}</Text>
+          {isMostReadLoading ? (
+            <Skeleton />
+          ) : (
+            mostReadData.stories.map((story: any) => (
+              <Card key={story.title} id="topStory">
+                <Image height={100} src={`${S3_URL}/${story.banner}`} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    padding: "8px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box>
+                    <Text style={{ fontWeight: "bold" }} lineClamp={1}>
+                      {story.title}
+                    </Text>
+                    <Text style={{ fontSize: "11px" }}>
+                      {story.listened} lượt nghe
+                    </Text>
+                  </Box>
+                  <ActionIcon id="playButton">
+                    <Play
+                      size={18}
+                      color={theme.colors.violet[8]}
+                      variant="Bold"
+                    />
+                  </ActionIcon>
                 </Box>
-                <ActionIcon id="playButton">
-                  <Play
-                    size={18}
-                    color={theme.colors.violet[8]}
-                    variant="Bold"
-                  />
-                </ActionIcon>
-              </Box>
-            </Card>
-          ))}
+              </Card>
+            ))
+          )}
         </Box>
       </Box>
 
@@ -241,49 +286,69 @@ export const HomePage: React.FC = () => {
           <Title order={1}>Yêu thích của tôi</Title>
         </Box>
         <Box className={classes.favouritesContainer}>
-          {FAVOURITES.map((item) => (
-            <Card key={item.name} id="favouriteItem">
-              <Text
-                style={{ fontSize: "11px", color: `${theme.colors.gray[3]}` }}
+          {isMostReadLoading || isCatesLoading ? (
+            <Skeleton />
+          ) : (
+            mostReadData.stories.map((story: any) => (
+              <Card
+                key={story._id}
+                id="favouriteItem"
+                style={{
+                  background: `linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${`${S3_URL}/${story.banner}`})`,
+                }}
               >
-                {item.gerne}
-              </Text>
-              <Text>{item.name}</Text>
-            </Card>
-          ))}
+                <Text
+                  style={{ fontSize: "11px", color: `${theme.colors.gray[3]}` }}
+                >
+                  {
+                    catesData.find(
+                      (item: any) => item.key === story.categories[0]
+                    ).title
+                  }
+                </Text>
+                <Text>{story.title}</Text>
+              </Card>
+            ))
+          )}
         </Box>
       </Box>
 
-      {/* top20 */}
+      {/* latest */}
       <Box>
         <Box className={classes.sectionTitle}>
           <Title order={1}>Mới nhất</Title>
         </Box>
         <Box className={classes.topStoriesContainer}>
-          {LATEST_STORIES.map((story) => (
-            <Card key={story.name} id="topStory">
-              <Image height={100} src={DEMO_IMG} />
-              <Box
-                sx={{
-                  display: "flex",
-                  padding: "8px",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box>
-                  <Text style={{ fontWeight: "bold" }}>{story.name}</Text>
-                  <Text style={{ fontSize: "11px" }}>{story.date}</Text>
+          {isMostReadLoading || isCatesLoading ? (
+            <Skeleton />
+          ) : (
+            mostReadData.stories.map((story: any) => (
+              <Card key={story._id} id="topStory">
+                <Image height={100} src={`${S3_URL}/${story.banner}`} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    padding: "8px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box>
+                    <Text style={{ fontWeight: "bold" }} lineClamp={1}>
+                      {story.title}
+                    </Text>
+                    <Text style={{ fontSize: "11px" }}>Đã tạo hôm nay</Text>
+                  </Box>
+                  <ActionIcon id="playButton">
+                    <Play
+                      size={18}
+                      color={theme.colors.violet[8]}
+                      variant="Bold"
+                    />
+                  </ActionIcon>
                 </Box>
-                <ActionIcon id="playButton">
-                  <Play
-                    size={18}
-                    color={theme.colors.violet[8]}
-                    variant="Bold"
-                  />
-                </ActionIcon>
-              </Box>
-            </Card>
-          ))}
+              </Card>
+            ))
+          )}
         </Box>
       </Box>
     </Box>

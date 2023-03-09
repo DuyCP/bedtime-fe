@@ -1,4 +1,4 @@
-import { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
 
 import {
   Box,
@@ -10,89 +10,89 @@ import {
   Tabs,
   Text,
   Title,
-} from '@mantine/core'
-import { BiCustomize } from 'react-icons/bi'
-import { BsMusicNoteList } from 'react-icons/bs'
-import { useMutation, useQuery } from 'react-query'
-import AudioPlayer from '../../components/AudioPlayer'
-import StoryItem, { IStory } from '../../components/StoryItem'
-import { getS3Url, shortenText } from '../../utils'
-import ReactGA from 'react-ga'
-import axios from 'axios'
+} from "@mantine/core";
+import { BiCustomize } from "react-icons/bi";
+import { BsMusicNoteList } from "react-icons/bs";
+import { useMutation, useQuery } from "react-query";
+import AudioPlayer from "../../components/AudioPlayer";
+import StoryItem, { IStory } from "../../components/StoryItem";
+import { getS3Url, shortenText } from "../../utils";
+import ReactGA from "react-ga";
+import axios from "axios";
 
-import '../../App.css'
-import InfiniteScrollList from '../../components/InfiniteScrollList'
+import "../../App.css";
+import InfiniteScrollList from "../../components/InfiniteScrollList";
 import {
   BASE_URL,
   GOOGLE_ENDPOINT,
   MAX_CHARS,
   STORY_LIMIT,
   VOICE_LIST,
-} from '../../constants'
-import { initGA, logPageView } from '../../analytics'
-import MicIcon from '../../icons/MicIcon'
-import NoteIcon from '../../icons/NoteIcon'
-import AddIcon from '../../icons/AddIcon'
-import CreateStory from '../CreateStory'
+} from "../../constants";
+import { initGA, logPageView } from "../../analytics";
+import MicIcon from "../../icons/MicIcon";
+import NoteIcon from "../../icons/NoteIcon";
+import AddIcon from "../../icons/AddIcon";
+import CreateStory from "../CreateStory";
 
 interface Item {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 export interface IAudioConfig {
-  content: string
-  speed: number
-  pitch: number
-  volumeGain: number
-  sampleRate: number
-  voice: string
-  effectsProfileId: string[]
+  content: string;
+  speed: number;
+  pitch: number;
+  volumeGain: number;
+  sampleRate: number;
+  voice: string;
+  effectsProfileId: string[];
 }
 
 const Main = (): JSX.Element => {
-  const [activeTab, setActiveTab] = useState<string>('story')
+  const [activeTab, setActiveTab] = useState<string>("story");
   const [audioConfig, setAudioConfig] = useState<IAudioConfig>({
-    content: '',
+    content: "",
     speed: 1,
     pitch: 0,
     volumeGain: 0,
     sampleRate: 20,
     voice: VOICE_LIST[0].value,
     effectsProfileId: [],
-  })
+  });
 
-  const [audio, setAudio] = useState<null | string>('')
-  const [page, setPage] = useState(1)
+  const [audio, setAudio] = useState<null | string>("");
+  const [page, setPage] = useState(1);
   const [selectedStory, setSelectedStory] = useState<IStory>({
     _id: 0,
     index: -1,
-    title: '',
-    content: '',
+    title: "",
+    content: "",
     duration: 0,
-    updatedAt: '',
+    updatedAt: "",
     categories: [],
-    approvedAt: '',
-    banner: '',
+    approvedAt: "",
+    banner: "",
     tags: [],
     listened: 0,
-    status: '',
-  })
-  const [storyList, setStoryList] = useState<IStory[]>([])
-  const inputRef = useRef<HTMLTextAreaElement>(null)
-  const playerRef = useRef<any>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
+    status: "",
+  });
+  const [storyList, setStoryList] = useState<IStory[]>([]);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const playerRef = useRef<any>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    initGA()
-    logPageView()
+    initGA();
+    logPageView();
     ReactGA.event({
-      action: 'test action',
-      label: 'test label',
-      category: 'test category',
+      action: "test action",
+      label: "test label",
+      category: "test category",
       value: 100,
-    })
-  }, [])
+    });
+  }, []);
 
   const mutation = useMutation(
     async (config: IAudioConfig) => {
@@ -114,20 +114,20 @@ const Main = (): JSX.Element => {
           },
           {
             headers: {
-              'Content-type': 'application/json; charset=UTF-8',
+              "Content-type": "application/json; charset=UTF-8",
             },
-            responseType: 'blob',
+            responseType: "blob",
           }
-        )
+        );
 
-        const reader = new FileReader()
-        reader.readAsDataURL(response.data)
+        const reader = new FileReader();
+        reader.readAsDataURL(response.data);
         reader.onloadend = () => {
-          const audioData = reader.result as string
-          setAudio(audioData)
-        }
+          const audioData = reader.result as string;
+          setAudio(audioData);
+        };
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     }
     // fetch(GOOGLE_ENDPOINT, {
@@ -159,7 +159,7 @@ const Main = (): JSX.Element => {
     //     }
     //   })
     //   .catch((error) => console.error(error))
-  )
+  );
 
   const {
     error: getStoriesError,
@@ -167,18 +167,18 @@ const Main = (): JSX.Element => {
     isLoading: getStoriesLoading,
     refetch,
   } = useQuery(
-    'api/stories',
+    "api/stories",
     async () => {
       const params = {
         page,
         limit: STORY_LIMIT,
-      }
-      const queryParams = new URLSearchParams(params as any).toString()
+      };
+      const queryParams = new URLSearchParams(params as any).toString();
 
-      const response = await fetch(`${BASE_URL}/api/stories?${queryParams}`)
-      const responseData = await response.json()
-      const storyListData = responseData.stories as IStory[]
-      console.log('🚀 | storyListData:', storyListData)
+      const response = await fetch(`${BASE_URL}/api/stories?${queryParams}`);
+      const responseData = await response.json();
+      const storyListData = responseData.stories as IStory[];
+      console.log("🚀 | storyListData:", storyListData);
 
       // const promises = storyListData.map(async (story, index) => {
       //   const detailResponse = await fetch(
@@ -191,83 +191,83 @@ const Main = (): JSX.Element => {
 
       // const storiesWithDetail = await Promise.all(promises)
       const storiesWithDetail = storyListData.map((story) => {
-        const metadata = (story as any).versions[0].metadata as any
-        const duration = metadata.duration
+        const metadata = (story as any).versions[0].metadata as any;
+        const duration = metadata.duration;
         return {
           ...story,
           duration: Math.ceil(duration),
           banner: getS3Url(story.banner),
-        } as IStory
-      })
+        } as IStory;
+      });
       console.log(
-        '🚀 | storiesWithDetail | storiesWithDetail:',
+        "🚀 | storiesWithDetail | storiesWithDetail:",
         storiesWithDetail
-      )
+      );
 
       // INFO: On page first load, automatically select the first story
       if (storyList.length === 0) {
-        const firstStory = storiesWithDetail[0]
-        const shortenedContent = firstStory.content.slice(0, MAX_CHARS)
-        mutation.mutate({ ...audioConfig, content: shortenedContent })
-        setSelectedStory(firstStory)
+        const firstStory = storiesWithDetail[0];
+        const shortenedContent = firstStory.content.slice(0, MAX_CHARS);
+        mutation.mutate({ ...audioConfig, content: shortenedContent });
+        setSelectedStory(firstStory);
       }
 
-      setStoryList((prev) => [...prev, ...storiesWithDetail])
-      return storiesWithDetail
+      setStoryList((prev) => [...prev, ...storiesWithDetail]);
+      return storiesWithDetail;
     },
     { enabled: false }
-  )
+  );
 
   useEffect(() => {
-    refetch()
-  }, [page])
+    refetch();
+  }, [page]);
 
   if (mutation.error)
-    return <Text>An error occurred: ${(mutation.error as any).message}</Text>
+    return <Text>An error occurred: ${(mutation.error as any).message}</Text>;
 
   const handleTextToSpeech = async (text: string) => {
     if (!text) {
-      console.log('Error: Empty text')
-      return
+      console.log("Error: Empty text");
+      return;
     }
-    const shortenedText = text.slice(0, MAX_CHARS)
-    await mutation.mutate({ ...audioConfig, content: shortenedText })
-  }
+    const shortenedText = text.slice(0, MAX_CHARS);
+    await mutation.mutate({ ...audioConfig, content: shortenedText });
+  };
 
   const loadMore = () => {
-    setPage((prev) => prev + 1)
-  }
+    setPage((prev) => prev + 1);
+  };
 
   const onSelectStory = (story: IStory) => {
-    setSelectedStory(story)
-    handleTextToSpeech(story.content)
-  }
+    setSelectedStory(story);
+    handleTextToSpeech(story.content);
+  };
 
   const playStory = () => {
     if (playerRef && playerRef.current) {
-      playerRef.current.audio.current.play()
+      playerRef.current.audio.current.play();
     }
-  }
+  };
 
   useImperativeHandle(playerRef, () => ({
     getAudioElement: () => {
-      return playerRef.current.audio.current
+      return playerRef.current.audio.current;
     },
-  }))
+  }));
 
-  const isStoryTab = activeTab === 'story'
-  const isCustomTab = activeTab === 'custom'
+  const isStoryTab = activeTab === "story";
+  const isCustomTab = activeTab === "custom";
 
   return (
     <Flex>
       <Container
-        id='main'
+        id="main"
         size={380}
         p={20}
         sx={{
-          background: '#F4F5FC',
+          background: "#F4F5FC",
           borderRadius: 4,
-          height: 'fit-content',
+          height: "fit-content",
         }}
       >
         {/* <Title
@@ -280,7 +280,7 @@ const Main = (): JSX.Element => {
           Bedtime Stories
         </Title> */}
 
-        <Stack sx={{ maxWidth: 600, marginInline: 'auto', gap: 0 }}>
+        <Stack sx={{ maxWidth: 600, marginInline: "auto", gap: 0 }}>
           <Stack>
             <>
               <AudioPlayer
@@ -291,31 +291,31 @@ const Main = (): JSX.Element => {
               />
 
               {mutation.error && (
-                <Text size='sm' color='red'>
+                <Text size="sm" color="red">
                   An error occurred: ${(mutation.error as any).message}
                 </Text>
               )}
             </>
           </Stack>
 
-          <Flex sx={{ width: '100%', marginInline: 'auto' }}>
+          <Flex sx={{ width: "100%", marginInline: "auto" }}>
             <Tabs
-              variant='pills'
-              defaultValue='story'
-              sx={{ width: '100%' }}
+              variant="pills"
+              defaultValue="story"
+              sx={{ width: "100%" }}
               onTabChange={(value) => setActiveTab(value as string)}
             >
               <Tabs.List>
                 <Tabs.Tab
-                  value='story'
-                  icon={<NoteIcon color={isStoryTab ? '#6741D9' : ''} />}
+                  value="story"
+                  icon={<NoteIcon color={isStoryTab ? "#6741D9" : ""} />}
                   sx={{ fontSize: 12 }}
                 >
                   Có sẵn
                 </Tabs.Tab>
                 <Tabs.Tab
-                  value='custom'
-                  icon={<AddIcon color={isCustomTab ? '#6741D9' : ''} />}
+                  value="custom"
+                  icon={<AddIcon color={isCustomTab ? "#6741D9" : ""} />}
                   sx={{ fontSize: 12 }}
                 >
                   Tạo mới
@@ -323,20 +323,20 @@ const Main = (): JSX.Element => {
               </Tabs.List>
 
               {/* Story List */}
-              <Tabs.Panel value='story' pt='xs'>
+              <Tabs.Panel value="story" pt="xs">
                 <Box>
                   <InfiniteScrollList
                     onLoadMore={loadMore}
                     loading={getStoriesLoading}
                     sx={{
                       height: 516,
-                      overflowY: 'scroll',
+                      overflowY: "scroll",
                     }}
                   >
                     {storyList.map((story, index) => {
                       const isActive =
                         selectedStory.index === index ||
-                        selectedStory._id === story._id
+                        selectedStory._id === story._id;
                       return (
                         <Box key={index} sx={{ marginBottom: 10 }}>
                           <StoryItem
@@ -347,14 +347,14 @@ const Main = (): JSX.Element => {
                             isPlaying={isPlaying && isActive}
                           />
                         </Box>
-                      )
+                      );
                     })}
                   </InfiniteScrollList>
                 </Box>
               </Tabs.Panel>
 
               {/* Create Story */}
-              <Tabs.Panel value='custom' pt='xs' sx={{ height: 410 }}>
+              <Tabs.Panel value="custom" pt="xs" sx={{ height: 410 }}>
                 <CreateStory
                   isLoading={mutation.isLoading}
                   audioConfig={audioConfig}
@@ -367,7 +367,7 @@ const Main = (): JSX.Element => {
         </Stack>
       </Container>
     </Flex>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;
