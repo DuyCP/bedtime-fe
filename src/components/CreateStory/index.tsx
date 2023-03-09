@@ -50,7 +50,6 @@ const CreateStory = (props: IAudioConfigProps): JSX.Element => {
     title: string
     content: string
   }) => {
-    console.log(values)
     generateAudio({ ...audioConfig, ...values })
     setAudioConfig((prev) => ({ ...prev, ...values }))
   }
