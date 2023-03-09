@@ -5,6 +5,7 @@ import { Box, MantineProvider } from '@mantine/core'
 
 import './App.css'
 import './override.css'
+import MyStories from './components/MyStories'
 
 const App = (): JSX.Element => {
   return (
@@ -30,6 +31,7 @@ const App = (): JSX.Element => {
           <Route path='/' element={<Layout />}>
             <Route index element={<Navigate to='/main' />} />
             <Route path='main' element={<Main />} />
+            <Route path='my-stories' element={<MyStories />} />
             <Route path='*' element={<Box sx={{ height: '93%' }}></Box>} />
           </Route>
         </Routes>

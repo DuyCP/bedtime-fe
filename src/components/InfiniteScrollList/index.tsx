@@ -46,7 +46,7 @@ const InfiniteScrollList: FC<PropsWithChildren<IInfiniteScrollListProps>> = (
 
       {loading && (
         <Box mx='auto' mb={10} sx={{ height: 30, width: 'fit-content' }}>
-          <Loader size='lg' variant='dots' color='#dddddd80' />
+          <Loader size='lg' variant='dots' color='#6741D9' />
         </Box>
       )}
     </Box>

@@ -16,8 +16,9 @@ import { BsMusicNoteList } from 'react-icons/bs'
 import { useMutation, useQuery } from 'react-query'
 import AudioPlayer from '../../components/AudioPlayer'
 import StoryItem, { IStory } from '../../components/StoryItem'
-import { shortenText } from '../../utils'
+import { getS3Url, shortenText } from '../../utils'
 import ReactGA from 'react-ga'
+import axios from 'axios'
 
 import '../../App.css'
 import InfiniteScrollList from '../../components/InfiniteScrollList'
@@ -68,9 +69,14 @@ const Main = (): JSX.Element => {
     index: -1,
     title: '',
     content: '',
-    source: '',
-    length: '',
+    duration: 0,
     updatedAt: '',
+    categories: [],
+    approvedAt: '',
+    banner: '',
+    tags: [],
+    listened: 0,
+    status: '',
   })
   const [storyList, setStoryList] = useState<IStory[]>([])
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -88,36 +94,71 @@ const Main = (): JSX.Element => {
     })
   }, [])
 
-  const mutation = useMutation((config: IAudioConfig) =>
-    fetch(GOOGLE_ENDPOINT, {
-      method: 'POST',
-      body: JSON.stringify({
-        input: { text: config.content },
-        voice: {
-          name: config.voice,
-        },
-        audioConfig: {
-          pitch: config.pitch,
-          volumeGainDb: config.volumeGain,
-          effectsProfileId: config.effectsProfileId,
-          speakingRate: config.speed,
-          // sampleRateHertz: config.sampleRate,
-        },
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((response) => response.blob())
-      .then((url) => {
+  const mutation = useMutation(
+    async (config: IAudioConfig) => {
+      try {
+        const response = await axios.post(
+          GOOGLE_ENDPOINT,
+          {
+            input: { text: config.content },
+            voice: {
+              name: config.voice,
+            },
+            audioConfig: {
+              pitch: config.pitch,
+              volumeGainDb: config.volumeGain,
+              effectsProfileId: config.effectsProfileId,
+              speakingRate: config.speed,
+              // sampleRateHertz: config.sampleRate,
+            },
+          },
+          {
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+            responseType: 'blob',
+          }
+        )
+
         const reader = new FileReader()
-        reader.readAsDataURL(url)
+        reader.readAsDataURL(response.data)
         reader.onloadend = () => {
           const audioData = reader.result as string
           setAudio(audioData)
         }
-      })
-      .catch((error) => console.error(error))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    // fetch(GOOGLE_ENDPOINT, {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     input: { text: config.content },
+    //     voice: {
+    //       name: config.voice,
+    //     },
+    //     audioConfig: {
+    //       pitch: config.pitch,
+    //       volumeGainDb: config.volumeGain,
+    //       effectsProfileId: config.effectsProfileId,
+    //       speakingRate: config.speed,
+    //       // sampleRateHertz: config.sampleRate,
+    //     },
+    //   }),
+    //   headers: {
+    //     'Content-type': 'application/json; charset=UTF-8',
+    //   },
+    // })
+    //   .then((response) => response.blob())
+    //   .then((url) => {
+    //     const reader = new FileReader()
+    //     reader.readAsDataURL(url)
+    //     reader.onloadend = () => {
+    //       const audioData = reader.result as string
+    //       setAudio(audioData)
+    //     }
+    //   })
+    //   .catch((error) => console.error(error))
   )
 
   const {
@@ -126,7 +167,7 @@ const Main = (): JSX.Element => {
     isLoading: getStoriesLoading,
     refetch,
   } = useQuery(
-    'stories',
+    'api/stories',
     async () => {
       const params = {
         page,
@@ -134,24 +175,40 @@ const Main = (): JSX.Element => {
       }
       const queryParams = new URLSearchParams(params as any).toString()
 
-      const response = await fetch(`${BASE_URL}/stories?${queryParams}`)
+      const response = await fetch(`${BASE_URL}/api/stories?${queryParams}`)
       const responseData = await response.json()
-      const storyListData = responseData.stories.stories as IStory[]
+      const storyListData = responseData.stories as IStory[]
+      console.log('🚀 | storyListData:', storyListData)
 
-      const promises = storyListData.map(async (story, index) => {
-        const detailResponse = await fetch(`${BASE_URL}/stories/${story._id}`)
-        const detail = await detailResponse.json()
-        const summary = shortenText(detail.story.content, 15) + '...'
-        return { ...detail.story, index, summary }
+      // const promises = storyListData.map(async (story, index) => {
+      //   const detailResponse = await fetch(
+      //     `${BASE_URL}/api/stories/${story._id}`
+      //   )
+      //   const detail = await detailResponse.json()
+      //   const summary = shortenText(detail.content, 15) + '...'
+      //   return { ...detail, index, summary }
+      // })
+
+      // const storiesWithDetail = await Promise.all(promises)
+      const storiesWithDetail = storyListData.map((story) => {
+        const metadata = (story as any).versions[0].metadata as any
+        const duration = metadata.duration
+        return {
+          ...story,
+          duration: Math.ceil(duration),
+          banner: getS3Url(story.banner),
+        } as IStory
       })
-
-      const storiesWithDetail = await Promise.all(promises)
+      console.log(
+        '🚀 | storiesWithDetail | storiesWithDetail:',
+        storiesWithDetail
+      )
 
       // INFO: On page first load, automatically select the first story
       if (storyList.length === 0) {
         const firstStory = storiesWithDetail[0]
         const shortenedContent = firstStory.content.slice(0, MAX_CHARS)
-        mutation.mutate(shortenedContent)
+        mutation.mutate({ ...audioConfig, content: shortenedContent })
         setSelectedStory(firstStory)
       }
 
@@ -176,7 +233,6 @@ const Main = (): JSX.Element => {
     const shortenedText = text.slice(0, MAX_CHARS)
     await mutation.mutate({ ...audioConfig, content: shortenedText })
   }
-
 
   const loadMore = () => {
     setPage((prev) => prev + 1)
@@ -203,8 +259,7 @@ const Main = (): JSX.Element => {
   const isCustomTab = activeTab === 'custom'
 
   return (
-    <Flex
-    >
+    <Flex>
       <Container
         id='main'
         size={380}
