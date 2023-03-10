@@ -1,14 +1,12 @@
 import { Box, Flex, Stack, Text, useMantineTheme } from "@mantine/core";
+import { Heart, Home, SearchNormal1 } from "iconsax-react";
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import HeartIcon from "../../icons/HeartIcon";
-import HomeIcon from "../../icons/HomeIcon";
-import SearchIcon from "../../icons/SearchIcon";
 
 const MENU_LIST = [
-  { label: "Trang chủ", value: "home", link: "/", Icon: HomeIcon },
-  { label: "Tìm kiếm", value: "search", link: "/search", Icon: SearchIcon },
-  { label: "Đã thích", value: "like", link: "/like", Icon: HeartIcon },
+  { label: "Trang chủ", value: "home", link: "/home", Icon: Home },
+  { label: "Tìm kiếm", value: "search", link: "/search", Icon: SearchNormal1 },
+  { label: "Đã thích", value: "like", link: "/like", Icon: Heart },
 ];
 
 const Layout = () => {
@@ -16,7 +14,7 @@ const Layout = () => {
   const theme = useMantineTheme();
 
   return (
-    <Box id="layout" sx={{ minWidth: 360, position: "relative" }}>
+    <Box id="layout" sx={{ minWidth: 400, position: "relative" }}>
       <Outlet />
 
       <Flex
@@ -46,12 +44,15 @@ const Layout = () => {
               onClick={() => setMenu(value)}
             >
               <Stack spacing={4.5} align="center">
-                <Icon color={menuColor} />
+                <Icon
+                  variant={isActive ? "Bold" : "Outline"}
+                  color={menuColor}
+                />
 
                 <Text
                   sx={{
                     textDecoration: "none",
-                    fontWeight: isActive ? 700 : 600,
+                    fontWeight: isActive ? 800 : 600,
                     fontSize: 13,
                     color: menuColor,
                   }}
