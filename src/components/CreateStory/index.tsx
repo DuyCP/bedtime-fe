@@ -10,6 +10,7 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UseMutateFunction } from 'react-query'
+import { useNavigate } from 'react-router-dom'
 import { MAX_STORY_CHARS, VOICE_LIST } from '../../constants'
 import MicIcon from '../../icons/MicIcon'
 import MusicIcon from '../../icons/MusicIcon'
@@ -26,6 +27,7 @@ const SPEED_OPTIONS = [0.5, 1.0, 1.5]
 
 const CreateStory = (props: IAudioConfigProps): JSX.Element => {
   const { audioConfig, isLoading, setAudioConfig, generateAudio } = props
+  const navigate = useNavigate()
 
   const form = useForm({
     initialValues: {
@@ -136,6 +138,7 @@ const CreateStory = (props: IAudioConfigProps): JSX.Element => {
         leftIcon={<MusicIcon />}
         // disabled={mutation.isLoading}
         // onClick={() => handleTextToSpeech(getInputText())}
+        onClick={() => navigate('/my-stories')}
         sx={{
           marginTop: 10,
           borderRadius: 8,

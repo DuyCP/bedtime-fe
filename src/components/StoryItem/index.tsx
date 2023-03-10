@@ -9,7 +9,7 @@ import { formatDuration, getS3Url } from '../../utils'
 import { DEFAULT_BANNER } from '../../constants'
 
 export interface IStory {
-  _id?: number
+  _id?: string
   index?: number
   categories: string[]
   banner: string
@@ -28,12 +28,20 @@ interface IStoryItemProps {
   story: IStory
   isActive: boolean
   isPlaying?: boolean
+  isLike?: boolean
   playStory: () => void
   onSelect: (story: IStory) => void
 }
 
 const StoryItem = (props: IStoryItemProps) => {
-  const { story, isActive, isPlaying, playStory, onSelect } = props
+  const {
+    story,
+    isActive,
+    isPlaying,
+    isLike = false,
+    playStory,
+    onSelect,
+  } = props
 
   const { title, content, duration, banner, categories } = story
 

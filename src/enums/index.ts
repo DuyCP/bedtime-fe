@@ -4,6 +4,6 @@ export const PROVIDER = {
 }
 
 export const GENDER = {
-  MALE: 'MALE',
-  FEMALE: 'FEMALE',
+  MALE: 'Nam',
+  FEMALE: 'Nữ',
 }
