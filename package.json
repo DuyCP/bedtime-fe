@@ -6,12 +6,10 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "start-prod": "npm run build && serve -s ./dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
-    "@google-cloud/text-to-speech": "^4.2.1",
     "@mantine/core": "^5.10.5",
     "@mantine/form": "^6.0.1",
     "@mantine/hooks": "^5.10.5",
