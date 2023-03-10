@@ -80,7 +80,7 @@ const MyStories = () => {
               playStory={() => {}}
               onSelect={() => {}}
               isPlaying={false}
-              isLike={true}
+              isLiked={true}
             />
           </Box>
         )

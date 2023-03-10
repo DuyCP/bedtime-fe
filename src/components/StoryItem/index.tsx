@@ -28,7 +28,7 @@ interface IStoryItemProps {
   story: IStory
   isActive: boolean
   isPlaying?: boolean
-  isLike?: boolean
+  isLiked?: boolean
   playStory: () => void
   onSelect: (story: IStory) => void
 }
@@ -38,7 +38,7 @@ const StoryItem = (props: IStoryItemProps) => {
     story,
     isActive,
     isPlaying,
-    isLike = false,
+    isLiked = false,
     playStory,
     onSelect,
   } = props
@@ -101,7 +101,10 @@ const StoryItem = (props: IStoryItemProps) => {
           </Stack>
 
           <Box sx={{ marginLeft: 'auto' }}>
-            <HeartIcon color={isActive ? 'white' : '#6741D9'} />
+            <HeartIcon
+              color={isActive ? 'white' : '#6741D9'}
+              secondaryColor={isLiked ? '#6741D9' : 'white'}
+            />
           </Box>
         </Flex>
 
