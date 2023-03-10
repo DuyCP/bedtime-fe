@@ -31,7 +31,7 @@ const App = (): JSX.Element => {
       <Box className="App">
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="/main" />} />
+            <Route index element={<Navigate to="/onboarding" />} />
             <Route path="main" element={<Main />} />
             <Route path="home" element={<HomePage />} />
             <Route path="my-stories" element={<MyStories />} />
