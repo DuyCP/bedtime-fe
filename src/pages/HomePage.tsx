@@ -14,33 +14,6 @@ import { Musicnote, Play, SearchNormal1 } from "iconsax-react";
 import { useQuery } from "react-query";
 import { BASE_URL, S3_URL } from "../constants";
 
-const DEMO_IMG =
-  "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1179&q=80";
-
-const TOP20_STORIES = [
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-];
-
-const LATEST_STORIES = [
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-];
-
-const FAVOURITES = [
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-];
-
 const useStyles = createStyles((theme) => ({
   searchInput: {
     ".mantine-TextInput-input": {
