@@ -48,7 +48,6 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const SearchPage: React.FC = () => {
-  const theme = useMantineTheme();
   const { classes } = useStyles();
   const { data: catesData, isLoading: isCatesLoading } = useQuery(
     "api/cates",
