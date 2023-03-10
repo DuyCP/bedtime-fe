@@ -226,6 +226,8 @@ export const HomePage: React.FC = () => {
           ) : (
             catesData.map((cate: any) => (
               <Card
+                component="a"
+                href="/main"
                 key={cate.key}
                 id="cateItem"
                 style={{
@@ -249,7 +251,7 @@ export const HomePage: React.FC = () => {
             <Skeleton />
           ) : (
             mostReadData.stories.map((story: any) => (
-              <Card key={story.title} id="topStory">
+              <Card key={story.title} component="a" href="/main" id="topStory">
                 <Image height={100} src={`${S3_URL}/${story.banner}`} />
                 <Box
                   sx={{
@@ -291,6 +293,8 @@ export const HomePage: React.FC = () => {
           ) : (
             mostReadData.stories.map((story: any) => (
               <Card
+                component="a"
+                href="/main"
                 key={story._id}
                 id="favouriteItem"
                 style={{
@@ -323,7 +327,7 @@ export const HomePage: React.FC = () => {
             <Skeleton />
           ) : (
             mostReadData.stories.map((story: any) => (
-              <Card key={story._id} id="topStory">
+              <Card key={story._id} component="a" href="main" id="topStory">
                 <Image height={100} src={`${S3_URL}/${story.banner}`} />
                 <Box
                   sx={{
