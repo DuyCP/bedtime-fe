@@ -53,7 +53,7 @@ export const OnboardingPage: React.FC = () => {
             Hơn 500 mẫu truyện hàng đầu Việt Nam và Thế Giới
           </Text>
           <Text className={classes.description} mt='xs' align='center'>
-            Kể bởi AI, làm đẹp giấc mơ con trẻ
+            Kể bởi AI, làm đẹp giấc mơ con
           </Text>
         </Box>
 
