@@ -8,6 +8,7 @@ import { OnboardingPage } from "./pages/OnboardingPage";
 import MyStories from "./components/MyStories";
 import "./App.css";
 import "./override.css";
+import { SearchPage } from "./pages/SearchPage";
 
 const App = (): JSX.Element => {
   return (
@@ -34,6 +35,7 @@ const App = (): JSX.Element => {
             <Route index element={<Navigate to="/onboarding" />} />
             <Route path="main" element={<Main />} />
             <Route path="home" element={<HomePage />} />
+            <Route path="search" element={<SearchPage />} />
             <Route path="my-stories" element={<MyStories />} />
             <Route path="*" element={<Box sx={{ height: "93%" }}></Box>} />
           </Route>

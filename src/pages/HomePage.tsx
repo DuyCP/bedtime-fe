@@ -6,54 +6,15 @@ import {
   Image,
   Skeleton,
   Text,
-  TextInput,
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { Musicnote, Play, SearchNormal1 } from "iconsax-react";
+import { Musicnote, Play } from "iconsax-react";
 import { useQuery } from "react-query";
+import { SearchInput } from "../components/SearchInput";
 import { BASE_URL, S3_URL } from "../constants";
 
-const DEMO_IMG =
-  "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1179&q=80";
-
-const TOP20_STORIES = [
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-  { name: "Cô bé lọ lem", num: "11.2k lượt nghe" },
-];
-
-const LATEST_STORIES = [
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-  { name: "Cô bé lọ lem", date: "Tạo 1 ngày trước" },
-];
-
-const FAVOURITES = [
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-  { name: "Cô bé lọ lem", gerne: "Truyện cổ tích" },
-];
-
 const useStyles = createStyles((theme) => ({
-  searchInput: {
-    ".mantine-TextInput-input": {
-      borderRadius: "10px",
-      borderColor: theme.colors.gray[3],
-      padding: "20px 45px",
-      paddingRight: "10px",
-    },
-    ".mantine-TextInput-icon": {
-      boxSizing: "content-box",
-      margin: "0px 8px",
-    },
-  },
   sectionTitle: {
     margin: "20px 0 15px 0",
     h1: {
@@ -179,7 +140,7 @@ export const HomePage: React.FC = () => {
       pb={87}
       className="scrollbar-hide"
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box mb="xs" sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box>
           <Text component="span" style={{ fontSize: 23, fontWeight: 700 }}>
             Xin chào,
@@ -207,13 +168,8 @@ export const HomePage: React.FC = () => {
           <Musicnote color={theme.colors.violet[8]} size={18} />
         </ActionIcon>
       </Box>
-      <Box mt="xs">
-        <TextInput
-          placeholder="Tìm truyện cho bé"
-          icon={<SearchNormal1 size={22} color={theme.colors.gray[9]} />}
-          className={classes.searchInput}
-        />
-      </Box>
+
+      <SearchInput />
 
       {/* cates */}
       <Box>
