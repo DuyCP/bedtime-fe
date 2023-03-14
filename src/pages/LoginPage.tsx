@@ -12,7 +12,6 @@ import {
 import { useForm } from '@mantine/form'
 import { IconAt, IconDatabase } from '@tabler/icons-react'
 import { Google, KeySquare, UserSquare } from 'iconsax-react'
-import GoogleLogin from 'react-google-login'
 import { useNavigate } from 'react-router-dom'
 import { textInputSx } from './SignUpPage'
 
@@ -144,7 +143,7 @@ const LoginPage = () => {
             Đăng nhập với Google
           </Button> */}
 
-          <GoogleLogin
+          {/* <GoogleLogin
             clientId='YOUR_CLIENT_ID'
             buttonText='Đăng nhập với Google'
             onSuccess={handleSuccess}
@@ -158,7 +157,7 @@ const LoginPage = () => {
               borderColor: '#DEE2E6',
               textAlign: 'center',
             }}
-          />
+          /> */}
         </Stack>
       </Stack>
     </Group>

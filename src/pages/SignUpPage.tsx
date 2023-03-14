@@ -12,7 +12,6 @@ import {
 import { useForm } from '@mantine/form'
 import { IconAt, IconDatabase } from '@tabler/icons-react'
 import { Google, KeySquare, UserSquare } from 'iconsax-react'
-import GoogleLogin from 'react-google-login'
 
 export const textInputSx = {
   '& .mantine-Input-input': {
@@ -135,7 +134,7 @@ const SignUpPage = () => {
             Tạo tài khoản với Google
           </Button> */}
 
-          <GoogleLogin
+          {/* <GoogleLogin
             clientId='YOUR_CLIENT_ID'
             buttonText='Tạo tài khoản với Google'
             prompt='select_account'
@@ -149,7 +148,7 @@ const SignUpPage = () => {
               borderColor: '#DEE2E6',
               textAlign: 'center',
             }}
-          />
+          /> */}
         </Stack>
       </Stack>
     </Group>
