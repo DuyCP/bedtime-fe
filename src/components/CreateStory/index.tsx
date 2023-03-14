@@ -23,8 +23,6 @@ interface IAudioConfigProps {
   setAudioConfig: React.Dispatch<React.SetStateAction<IAudioConfig>>
 }
 
-const SPEED_OPTIONS = [0.5, 1.0, 1.5]
-
 const CreateStory = (props: IAudioConfigProps): JSX.Element => {
   const { audioConfig, isLoading, setAudioConfig, generateAudio } = props
   const navigate = useNavigate()
